@@ -1,0 +1,63 @@
+{
+  "name": "vite-plugin-local",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "A Vite plugin to enable a development environment for minimalists.",
+  "author": "Chris Breuer <chris@stacksjs.org>",
+  "license": "MIT",
+  "homepage": "https://github.com/stacksjs/vite-plugin-local#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stacksjs/vite-plugin-local.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stacksjs/vite-plugin-local/issues"
+  },
+  "keywords": ["typescript", "vite", "plugin", "local", "vite-plugin-local", "development", "environment", "reverse-proxy", "ssl", "https", "rpx", "tlsx", "minimalists"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./*": {
+      "import": "./dist/*"
+    }
+  },
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "bun --bun build.ts",
+    "lint": "bunx eslint .",
+    "lint:fix": "bunx eslint . --fix",
+    "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
+    "commit": "git cz",
+    "changelog": "bunx changelogen --output CHANGELOG.md",
+    "prepublishOnly": "bun --bun run build",
+    "release": "bun run changelog && bunx bumpp package.json --all",
+    "test": "bun test",
+    "typecheck": "bun --bun tsc --noEmit",
+    "dev:docs": "bunx --bun vitepress dev docs",
+    "build:docs": "bunx --bun vitepress build docs",
+    "preview:docs": "bunx --bun vitepress preview docs"
+  },
+  "devDependencies": {
+    "@stacksjs/eslint-config": "^3.8.1-beta.2",
+    "@stacksjs/rpx": "^0.4.1",
+    "@types/bun": "^1.1.14",
+    "bumpp": "^9.8.1",
+    "bun-plugin-dtsx": "^0.21.9",
+    "changelogen": "^0.5.7",
+    "lint-staged": "^15.2.10",
+    "simple-git-hooks": "^2.11.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.1",
+    "vitepress": "^1.5.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "bun lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "bunx eslint . --fix"
+  }
+}
