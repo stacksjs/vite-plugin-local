@@ -14,12 +14,13 @@
 
 - Pretty development URLs
 - Smart HTTPS management
+- Lightweight
 
 ## Install
 
 ```bash
 npm install -d vite-plugin-local
-bun install -d vite-plugin-local
+# bun install -d vite-plugin-local
 ```
 
 ## Get Started
