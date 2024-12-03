@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-import Local from '../../src/index'
+// import Local from '../../src/index'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -26,13 +26,13 @@ export default defineConfig({
   },
   vite: {
     plugins: [
-      // @ts-expect-error seems to be a bug in Vitepress not being ready for Vite 6 (?)
-      Local({
-        to: 'my-app.localhost',
-        https: true, // Use default SSL config
-        verbose: true, // Enable detailed logging
-        etcHostsCleanup: true, // Cleanup /etc/hosts on shutdown
-      }),
+      // // @ts-expect-error seems to be a bug in Vitepress not being ready for Vite 6 (?)
+      // Local({
+      //   domain: 'my-app.local', // default: stacks.localhost
+      //   https: true, // Use default SSL config, pass TlsConfig options for custom
+      //   verbose: true, // Enable detailed logging
+      //   etcHostsCleanup: true, // Cleanup /etc/hosts on shutdown
+      // }),
     ],
   },
 })

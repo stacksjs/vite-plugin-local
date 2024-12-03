@@ -1,4 +1,4 @@
-import type { CustomTlsConfig } from '@stacksjs/rpx'
+import type { TlsConfig } from '@stacksjs/rpx'
 
 export interface VitePluginLocalOptions {
   /**
@@ -11,7 +11,7 @@ export interface VitePluginLocalOptions {
    * The target domain to proxy to (e.g., 'my-app.localhost')
    * @example 'my-app.localhost'
    */
-  to: string
+  domain: string
 
   /**
    * SSL/TLS configuration
@@ -20,7 +20,7 @@ export interface VitePluginLocalOptions {
    * - object: custom SSL configuration
    * @default false
    */
-  https?: boolean | CustomTlsConfig
+  https?: boolean | TlsConfig
 
   /**
    * Whether to cleanup /etc/hosts entries on shutdown
@@ -35,4 +35,4 @@ export interface VitePluginLocalOptions {
   verbose?: boolean
 }
 
-export type { CustomTlsConfig }
+export type { TlsConfig }
