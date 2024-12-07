@@ -3,7 +3,6 @@ import type { Plugin, ViteDevServer } from 'vite'
 import type { VitePluginLocalOptions } from './types'
 import { exec } from 'node:child_process'
 import process from 'node:process'
-import readline from 'node:readline'
 import { promisify } from 'node:util'
 import { cleanup, startProxies } from '@stacksjs/rpx'
 import colors from 'picocolors'
@@ -11,37 +10,10 @@ import { buildConfig } from './utils'
 
 const execAsync = promisify(exec)
 
-async function getSudoPassword(): Promise<string> {
-  return new Promise((resolve) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    })
-
-    process.stdout.write('\nSudo access required for proxy setup.\nPassword: ')
-
-    rl.stdoutMuted = true
-    // @ts-expect-error custom property
-    rl._writeToOutput = function _writeToOutput(stringToWrite) {
-      if (stringToWrite.includes('Password'))
-        process.stdout.write(stringToWrite)
-      else
-        process.stdout.write('*')
-    }
-
-    rl.question('', (password) => {
-      process.stdout.write('\n')
-      rl.close()
-      resolve(password)
-    })
-  })
-}
-
-async function validateSudo(password: string): Promise<boolean> {
+// Simple sudo validation
+async function validateSudo(): Promise<boolean> {
   try {
-    await execAsync(`echo "${password}" | sudo -S echo "Testing sudo access"`, {
-      stdio: 'pipe',
-    })
+    await execAsync('sudo -n true')
     return true
   }
   catch (error) {
@@ -57,7 +29,6 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
   } = options
 
   let domains: string[] | undefined
-  let sudoPassword: string | undefined
   let proxyUrl: string | undefined
   let originalConsole: typeof console
 
@@ -83,22 +54,24 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
         return
 
       try {
-        // Store original console methods
         originalConsole = { ...console }
 
-        // Get sudo access before starting server
-        debug('Getting sudo password...')
-        sudoPassword = await getSudoPassword()
+        debug('Checking sudo access...')
+        const hasSudo = await validateSudo()
 
-        debug('Validating sudo access...')
-        const isValid = await validateSudo(sudoPassword)
+        if (!hasSudo) {
+          console.log('\nSudo access required for proxy setup.')
+          console.log('Please enter your password when prompted.\n')
 
-        if (!isValid) {
-          console.error('Invalid sudo password. Please restart the dev server and try again.')
-          process.exit(1)
+          try {
+            await execAsync('sudo true')
+          }
+          catch (error) {
+            console.error('Failed to get sudo access. Please try again.')
+            process.exit(1)
+          }
         }
 
-        process.env.SUDO_PASSWORD = sudoPassword
         debug('Sudo access validated')
 
         const setupProxy = async () => {
@@ -129,20 +102,32 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
             console.warn = originalConsole.warn
 
             // Custom print URLs function
-            const originalPrintUrls = server.printUrls
             server.printUrls = function () {
               const protocol = options.https ? 'https' : 'http'
-              console.log(`\n  vitepress v1.5.0 & rpx v0.5.0\n`)
-              console.log(`  ➜  Local:   ${colors.cyan(`http://localhost:${port}/`)}`)
-              console.log(`  ➜  Proxied: ${colors.cyan(`${protocol}://${proxyUrl}/`)}`)
+              const port = server.config.server.port || 5173
+              const localUrl = `http://localhost:${port}/`
+              const proxiedUrl = `${protocol}://${proxyUrl}/`
+
+              const colorUrl = (url: string) =>
+                colors.cyan(url.replace(/:(\d+)\//, (_, port) => `:${colors.bold(port)}/`))
+
+              console.log(`\n${colors.bold(colors.green('rpx'))} ${colors.green('v0.5.1')}\n`)
+              console.log(`  ${colors.green('➜')}  ${colors.bold('Local')}:   ${colorUrl(localUrl)}`)
+              console.log(`  ${colors.green('➜')}  ${colors.bold('Proxied')}: ${colorUrl(proxiedUrl)}`)
+
               if (options.https) {
-                console.log(`  ➜  SSL:     ${colors.dim('TLS 1.2/1.3, HTTP/2, HSTS')}`)
+                console.log(`  ${colors.green('➜')}  ${colors.bold('SSL')}:     ${colors.dim('TLS 1.2/1.3, HTTP/2')}`)
               }
-              console.log(`  ➜  Network: use --host to expose`)
-              console.log(`  ➜  press h to show help\n`)
+
+              console.log(
+                colors.dim(`  ${colors.green('➜')}  ${colors.bold('Network')}: use `)
+                + colors.bold('--host')
+                + colors.dim(' to expose'),
+              )
+
+              console.log(`\n  ${colors.green('➜')}  press ${colors.bold('h')} to show help\n`)
             }
 
-            // Force a reprint of the URLs
             server.printUrls()
             debug('Proxy setup complete')
           }
@@ -164,16 +149,12 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
       server.httpServer?.once('close', async () => {
         if (domains?.length) {
           debug('Cleaning up...')
-          if (sudoPassword)
-            process.env.SUDO_PASSWORD = sudoPassword
-
           await cleanup({
             domains,
             etcHostsCleanup,
             verbose,
           })
           domains = undefined
-          sudoPassword = undefined
           debug('Cleanup complete')
         }
       })

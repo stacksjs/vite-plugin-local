@@ -29,9 +29,9 @@ export default defineConfig({
       // @ts-expect-error seems to be a bug in Vitepress not being ready for Vite 6 (?)
       Local({
         domain: 'my-app.local', // default: stacks.localhost
-        https: true, // Use default SSL config, pass TlsConfig options for custom
-        verbose: false, // Enable detailed logging
+        https: true, // Use default SSL config, pass TlsConfig options to customize
         etcHostsCleanup: true, // Cleanup /etc/hosts on shutdown
+        verbose: false, // Enable detailed logging
       }),
     ],
   },
