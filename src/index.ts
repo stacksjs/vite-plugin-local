@@ -16,6 +16,7 @@ async function validateSudo(): Promise<boolean> {
     await execAsync('sudo -n true')
     return true
   }
+  // eslint-disable-next-line unused-imports/no-unused-vars
   catch (error) {
     return false
   }
@@ -66,6 +67,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
           try {
             await execAsync('sudo true')
           }
+          // eslint-disable-next-line unused-imports/no-unused-vars
           catch (error) {
             console.error('Failed to get sudo access. Please try again.')
             process.exit(1)
