@@ -94,8 +94,8 @@ The MIT License (MIT). Please see [LICENSE](https://github.com/stacksjs/stacks/t
 Made with 💙
 
 <!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/@stacksjs/vite-plugin-local?style=flat-square
-[npm-version-href]: https://npmjs.com/package/@stacksjs/vite-plugin-local
+[npm-version-src]: https://img.shields.io/npm/v/vite-plugin-local?style=flat-square
+[npm-version-href]: https://npmjs.com/package/vite-plugin-local
 [github-actions-src]: https://img.shields.io/github/actions/workflow/status/stacksjs/vite-plugin-local/ci.yml?style=flat-square&branch=main
 [github-actions-href]: https://github.com/stacksjs/vite-plugin-local/actions?query=workflow%3Aci
 
