@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.1.0...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.1.0...main)
+
+### 🏡 Chore
+
+- Adjust dtsx name ([9550515](https://github.com/stacksjs/vite-plugin-local/commit/9550515))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## ...main
 
 
