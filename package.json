@@ -31,7 +31,6 @@
     "lint": "bunx eslint .",
     "lint:fix": "bunx eslint . --fix",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
-    "commit": "git cz",
     "changelog": "bunx changelogen --output CHANGELOG.md",
     "prepublishOnly": "bun --bun run build",
     "release": "bun run changelog && bunx bumpp package.json --all",
@@ -43,7 +42,7 @@
   },
   "devDependencies": {
     "@stacksjs/eslint-config": "^3.8.1-beta.2",
-    "@stacksjs/rpx": "^0.4.1",
+    "@stacksjs/rpx": "^0.5.0",
     "@types/bun": "^1.1.14",
     "bumpp": "^9.8.1",
     "bun-plugin-dtsx": "^0.21.9",

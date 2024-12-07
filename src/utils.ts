@@ -2,6 +2,7 @@ import type { SingleReverseProxyConfig } from '@stacksjs/rpx'
 import type { VitePluginLocalOptions } from './types'
 import os from 'node:os'
 import path from 'node:path'
+import { httpsConfig } from '@stacksjs/rpx'
 
 export function getDefaultSSLConfig(): { caCertPath: string, certPath: string, keyPath: string } {
   return {
@@ -14,9 +15,10 @@ export function getDefaultSSLConfig(): { caCertPath: string, certPath: string, k
 export function buildConfig(options: VitePluginLocalOptions, serverUrl: string): SingleReverseProxyConfig {
   return {
     from: serverUrl,
-    to: options.to,
-    https: options.https === true ? getDefaultSSLConfig() : options.https || false,
+    to: options.domain,
+    https: options.https === true ? httpsConfig(options) : options.https || false,
     etcHostsCleanup: options.etcHostsCleanup ?? true,
-    verbose: options.verbose ?? false,
+    verbose: false,
+    // verbose: options.verbose ?? false,
   }
 }
