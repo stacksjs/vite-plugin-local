@@ -14,6 +14,7 @@
 
 - Pretty development URLs
 - Smart HTTPS management
+- Soon: Local Tunneling
 - Lightweight
 
 ## Install
