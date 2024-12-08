@@ -16,9 +16,13 @@ export function buildConfig(options: VitePluginLocalOptions, serverUrl: string):
   return {
     from: serverUrl,
     to: options.domain,
-    https: options.https === true ? httpsConfig(options) : options.https || false,
+    https: options.https === true
+      ? httpsConfig({
+        ...options,
+        to: options.domain,
+      })
+      : options.https || false,
     etcHostsCleanup: options.etcHostsCleanup ?? true,
-    verbose: false,
-    // verbose: options.verbose ?? false,
+    verbose: options.verbose ?? false,
   }
 }
