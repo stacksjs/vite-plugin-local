@@ -36,8 +36,8 @@
     "release": "bun run changelog && bunx bumpp package.json --all",
     "test": "bun test",
     "typecheck": "bun --bun tsc --noEmit",
-    "dev:docs": "bunx --bun vitepress dev docs",
-    "build:docs": "bunx --bun vitepress build docs",
+    "dev:docs": "vitepress dev docs",
+    "build:docs": "vitepress build docs",
     "preview:docs": "bunx --bun vitepress preview docs"
   },
   "devDependencies": {
