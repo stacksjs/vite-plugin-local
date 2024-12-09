@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "vite-plugin-local"
   text: "A better developer environment."
-  tagline: My great project tagline
+  tagline: "A smart reverse proxy for local development, with HTTPS support & other goodies."
   actions:
     - theme: brand
       text: Markdown Examples
@@ -15,10 +15,12 @@ hero:
       link: /api-examples
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Pretty development URLs
+    details: "No more `localhost:5173`, instead get `my-app.local`."
+  - title: Smart HTTPS management
+    details: "Manages HTTPS certificates for you in zero-config & zero-setup way."
+  - title: Automatically cleans URLs
+    details: "No more `.html` extensions, just clean URLs."
+  - title: Lightweight & Configurable
+    details: "Just a few lines of code to get started, with a lot of options to customize."
 ---
