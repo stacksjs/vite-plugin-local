@@ -29,6 +29,14 @@ export interface VitePluginLocalOptions {
   etcHostsCleanup?: boolean
 
   /**
+   * By default, VitePress resolves inbound links to URLs ending with .html.
+   * However, some users may prefer "Clean URLs" without the .html extension
+   * for example, example.com/path instead of example.com/path.html.
+   * @default false
+   */
+  cleanUrls?: boolean
+
+  /**
    * Enable verbose logging
    * @default false
    */

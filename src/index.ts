@@ -2,11 +2,37 @@
 import type { Plugin, ViteDevServer } from 'vite'
 import type { VitePluginLocalOptions } from './types'
 import { exec } from 'node:child_process'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import process from 'node:process'
 import { promisify } from 'node:util'
 import { cleanup, startProxies } from '@stacksjs/rpx'
 import colors from 'picocolors'
+import packageJson from '../package.json'
 import { buildConfig } from './utils'
+
+function getPackageVersions() {
+  let viteVersion
+  try {
+    // Try to get Vite version from node_modules first
+    const vitePackageJson = readFileSync(
+      join(process.cwd(), 'node_modules', 'vite', 'package.json'),
+      'utf-8',
+    )
+    viteVersion = JSON.parse(vitePackageJson).version
+  }
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  catch (error) {
+    // Fallback to package.json dependencies
+    viteVersion = packageJson.devDependencies?.vite?.replace('^', '')
+    || '0.0.0'
+  }
+
+  return {
+    'vite': viteVersion,
+    'vite-plugin-local': packageJson.version,
+  }
+}
 
 const execAsync = promisify(exec)
 
@@ -27,6 +53,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
     enabled = true,
     verbose = false,
     etcHostsCleanup = true,
+    cleanUrls = false,
   } = options
 
   let domains: string[] | undefined
@@ -45,8 +72,10 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
     config(config) {
       if (!enabled)
         return config
+
       config.server = config.server || {}
       config.server.middlewareMode = false
+
       return config
     },
 
@@ -113,7 +142,14 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
               const colorUrl = (url: string) =>
                 colors.cyan(url.replace(/:(\d+)\//, (_, port) => `:${colors.bold(port)}/`))
 
-              console.log(`\n${colors.bold(colors.green('rpx'))} ${colors.green('v0.5.1')}\n`)
+              const versions = getPackageVersions()
+
+              console.log(
+                `\n${colors.bold(colors.green('vite'))} ${colors.green(`v${versions.vite}`)} ${colors.italic(
+                  colors.green('&'),
+                )} ${colors.bold(colors.green('vite-plugin-local'))} ${colors.green(`v${versions['vite-plugin-local']}`)}\n`,
+              )
+
               console.log(`  ${colors.green('➜')}  ${colors.bold('Local')}:   ${colorUrl(localUrl)}`)
               console.log(`  ${colors.green('➜')}  ${colors.bold('Proxied')}: ${colorUrl(proxiedUrl)}`)
 
@@ -151,12 +187,15 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
       server.httpServer?.once('close', async () => {
         if (domains?.length) {
           debug('Cleaning up...')
+
           await cleanup({
             domains,
             etcHostsCleanup,
             verbose,
           })
+
           domains = undefined
+
           debug('Cleanup complete')
         }
       })

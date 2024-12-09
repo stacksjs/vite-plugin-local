@@ -23,6 +23,7 @@ export function buildConfig(options: VitePluginLocalOptions, serverUrl: string):
       })
       : options.https || false,
     etcHostsCleanup: options.etcHostsCleanup ?? true,
+    cleanUrls: options.cleanUrls ?? false,
     verbose: options.verbose ?? false,
   }
 }
