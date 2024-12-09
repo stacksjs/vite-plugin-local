@@ -53,7 +53,6 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
     enabled = true,
     verbose = false,
     etcHostsCleanup = true,
-    cleanUrls = false,
   } = options
 
   let domains: string[] | undefined
