@@ -8,7 +8,7 @@
 
 # Local Development
 
-> A reverse proxy for local development with HTTPS support.
+> A smart reverse proxy for local development, with HTTPS support & other goodies.
 
 ## Features
 
