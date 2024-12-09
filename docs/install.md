@@ -1,6 +1,6 @@
 # Introduction
 
-`vite-plugin-local` is a smart reverse proxy for local development, with HTTPS support, and other goodies.
+`bunfig` is a smart reverse proxy for local development, with HTTPS support, and other goodies.
 
 ## Features
 
