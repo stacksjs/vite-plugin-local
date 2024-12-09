@@ -8,19 +8,23 @@ hero:
   tagline: "A smart reverse proxy for local development, with HTTPS support & other goodies."
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Documentation
+      link: /get-started
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: View on GitHub
+      link: https://github.com/stacksjs/vite-plugin-local
 
 features:
   - title: Pretty development URLs
+    icon: 💅
     details: "No more `localhost:5173`, instead get `my-app.local`."
   - title: Smart HTTPS management
+    icon: 🔐
     details: "Manages HTTPS certificates for you in zero-config & zero-setup way."
   - title: Automatically cleans URLs
+    icon: 🧹
     details: "No more `.html` extensions, just clean URLs."
   - title: Lightweight & Configurable
+    icon: 🚀
     details: "Just a few lines of code to get started, with a lot of options to customize."
 ---
