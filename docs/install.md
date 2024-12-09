@@ -1,23 +1,11 @@
-# Introduction
-
-`bunfig` is a smart reverse proxy for local development, with HTTPS support, and other goodies.
-
-## Features
-
-- Pretty development URLs
-- Smart HTTPS management
-- Automatically cleans URLs
-- Lightweight
-- _Soon: Local Tunneling_
-
-## Install
+# Install
 
 ```bash
 npm install -d vite-plugin-local
 # bun install -d vite-plugin-local
 ```
 
-## Get Started
+## Usage
 
 ```ts
 // vite.config.ts

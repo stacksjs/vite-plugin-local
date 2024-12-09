@@ -1,6 +1,6 @@
 # Introduction
 
-`bunfig` is a smart reverse proxy for local development, with HTTPS support, and other goodies.
+`vite-plugin-local` is a smart reverse proxy for local development, with HTTPS support, and other goodies.
 
 ## Features
 
@@ -9,41 +9,6 @@
 - Automatically cleans URLs
 - Lightweight
 - _Soon: Local Tunneling_
-
-## Install
-
-```bash
-npm install -d vite-plugin-local
-# bun install -d vite-plugin-local
-```
-
-## Get Started
-
-```ts
-// vite.config.ts
-import { defineConfig } from 'vite'
-import Local from 'vite-plugin-local'
-
-export default defineConfig({
-  plugins: [
-    Local({
-      domain: 'my-app.local', // default: stacks.localhost
-      https: true, // default: true, pass TlsConfig options for custom certificates
-      etcHostsCleanup: true, // default: true, cleans up /etc/hosts on server shutdown
-      cleanUrls: true, // default: false, cleans up URLs by not requiring the .html extension
-      verbose: true, // default: false, enables detailed logging
-    })
-  ]
-})
-```
-
-To learn more, head over to the [documentation](https://docs.stackjs.org/).
-
-## Testing
-
-```bash
-bun test
-```
 
 ## Changelog
 

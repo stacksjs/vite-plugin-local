@@ -9,7 +9,7 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Docs', link: '/introduction' },
+      { text: 'Docs', link: '/intro' },
       { text: 'Changelog', link: 'https://github.com/stacksjs/vite-plugin-local/releases' },
     ],
 
@@ -17,7 +17,7 @@ export default defineConfig({
       {
         text: 'Get Started',
         items: [
-          { text: 'Introduction', link: '/introduction' },
+          { text: 'Introduction', link: '/intro' },
           { text: 'Install', link: '/install' },
         ],
       },
