@@ -58,11 +58,45 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
   let domains: string[] | undefined
   let proxyUrl: string | undefined
   let originalConsole: typeof console
+  let cleanupPromise: Promise<void> | null = null
 
   const debug = (...args: any[]) => {
     if (verbose)
       originalConsole.log('[vite-plugin-local]', ...args)
   }
+
+  // Override the library's process.exit
+  const originalExit = process.exit
+  process.exit = ((code?: number) => {
+    if (cleanupPromise) {
+      cleanupPromise.finally(() => {
+        process.exit = originalExit
+        process.exit(code)
+      })
+      return undefined as never
+    }
+    return originalExit(code)
+  }) as (code?: number) => never
+
+  // Add cleanup handler for process exit
+  const exitHandler = async () => {
+    if (domains?.length) {
+      debug('Cleaning up...')
+      cleanupPromise = cleanup({
+        domains,
+        etcHostsCleanup,
+        verbose,
+      })
+      await cleanupPromise
+      domains = undefined
+      debug('Cleanup complete')
+    }
+  }
+
+  // Handle cleanup for different termination signals
+  process.on('SIGINT', exitHandler)
+  process.on('SIGTERM', exitHandler)
+  process.on('beforeExit', exitHandler)
 
   return {
     name: 'vite-plugin-local',
@@ -184,19 +218,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
       }
 
       server.httpServer?.once('close', async () => {
-        if (domains?.length) {
-          debug('Cleaning up...')
-
-          await cleanup({
-            domains,
-            etcHostsCleanup,
-            verbose,
-          })
-
-          domains = undefined
-
-          debug('Cleanup complete')
-        }
+        await exitHandler()
       })
     },
   }
