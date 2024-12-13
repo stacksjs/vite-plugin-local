@@ -47,7 +47,7 @@
     "bumpp": "^9.9.1",
     "bun-plugin-dtsx": "^0.21.9",
     "changelogen": "^0.5.7",
-    "lint-staged": "^15.2.10",
+    "lint-staged": "^15.2.11",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.3",
