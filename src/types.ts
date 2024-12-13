@@ -23,10 +23,17 @@ export interface VitePluginLocalOptions {
   https?: boolean | TlsConfig
 
   /**
-   * Whether to cleanup /etc/hosts entries on shutdown
-   * @default true
+   * Cleanup options
+   * - true: cleanup everything
+   * - false: cleanup nothing
+   * - object: cleanup specific items
+   * @default { hosts: true, certs: false }
+   * @example { hosts: true, certs: true }
    */
-  etcHostsCleanup?: boolean
+  cleanup?: boolean | {
+    hosts?: boolean
+    certs?: boolean
+  }
 
   /**
    * By default, VitePress resolves inbound links to URLs ending with .html.

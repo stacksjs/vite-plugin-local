@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import Local from '../../src/index'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -27,6 +28,21 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/stacksjs/vite-plugin-local' },
       { icon: 'bluesky', link: 'https://bsky.app/profile/chrisbreuer.dev' },
       { icon: 'twitter', link: 'https://twitter.com/stacksjs' },
+    ],
+  },
+
+  vite: {
+    plugins: [
+      // @ts-expect-error seems to be a bug in Vitepress not being ready for Vite 6 (?)
+      Local({
+        domain: 'docs.local', // default: stacks.localhost
+        https: true, // Use default SSL config, pass TlsConfig options to customize
+        cleanup: {
+          hosts: true, // Clean up relating /etc/hosts entry
+          certs: false, // Clean up relating SSL certificates
+        },
+        verbose: false, // Enable detailed logging
+      }),
     ],
   },
 })

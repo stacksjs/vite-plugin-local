@@ -1,7 +1,9 @@
+// @ts-expect-error dtsx needs to fully support this
 import type { SingleReverseProxyConfig } from '@stacksjs/rpx'
 import type { VitePluginLocalOptions } from './types'
 import os from 'node:os'
 import path from 'node:path'
+// @ts-expect-error dtsx needs to fully support this
 import { httpsConfig } from '@stacksjs/rpx'
 
 export function getDefaultSSLConfig(): { caCertPath: string, certPath: string, keyPath: string } {
@@ -22,8 +24,9 @@ export function buildConfig(options: VitePluginLocalOptions, serverUrl: string):
         to: options.domain,
       })
       : options.https || false,
-    etcHostsCleanup: options.etcHostsCleanup ?? true,
+    cleanup: options.cleanup ?? true,
     cleanUrls: options.cleanUrls ?? false,
+    vitePluginUsage: true,
     verbose: options.verbose ?? false,
   }
 }

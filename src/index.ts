@@ -32,6 +32,7 @@ function getPackageVersions() {
     )
     viteVersion = JSON.parse(vitePackageJson).version
   }
+  // eslint-disable-next-line unused-imports/no-unused-vars
   catch (error) {
     // Fallback to package.json dependencies
     viteVersion = packageJson.devDependencies?.vite?.replace('^', '') || '0.0.0'
@@ -85,7 +86,10 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
   const {
     enabled = true,
     verbose = false,
-    etcHostsCleanup = true,
+    cleanup: cleanupOpts = {
+      hosts: true,
+      certs: false,
+    },
   } = options
   let domains: string[] | undefined
   let proxyUrl: string | undefined
@@ -105,7 +109,8 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
       debug('Cleaning up...')
       cleanupPromise = cleanup({
         domains,
-        etcHostsCleanup,
+        hosts: typeof cleanupOpts === 'boolean' ? cleanupOpts : cleanupOpts?.hosts,
+        certs: typeof cleanupOpts === 'boolean' ? cleanupOpts : cleanupOpts?.certs,
         verbose,
       })
       await cleanupPromise
@@ -175,6 +180,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
             try {
               await execAsync('sudo true')
             }
+            // eslint-disable-next-line unused-imports/no-unused-vars
             catch (error) {
               console.error('Failed to get sudo access. Please try again.')
               process.exit(1)
