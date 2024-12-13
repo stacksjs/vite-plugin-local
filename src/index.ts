@@ -7,7 +7,7 @@ import { join } from 'node:path'
 import process from 'node:process'
 import { promisify } from 'node:util'
 import { checkExistingCertificates, checkHosts, cleanup, startProxies } from '@stacksjs/rpx'
-import colors, { dim } from 'picocolors'
+import { bold, cyan, dim, green } from 'picocolors'
 import packageJson from '../package.json'
 import { buildConfig } from './utils'
 
@@ -210,34 +210,34 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
                 const localUrl = `http://localhost:${port}/`
                 const proxiedUrl = `${protocol}://${proxyUrl}/`
                 const colorUrl = (url: string) =>
-                  colors.cyan(url.replace(/:(\d+)\//, (_, port) => `:${colors.bold(port)}/`))
+                  cyan(url.replace(/:(\d+)\//, (_, port) => `:${bold(port)}/`))
 
                 const versions = getPackageVersions()
                 if (versions.vitepress) {
                   console.log(
-                    `\n  ${colors.bold(colors.green('vitepress'))} ${colors.green(`v${versions.vitepress}`)} via ${colors.bold(colors.green('vite-plugin-local'))} ${colors.green(`v${versions['vite-plugin-local']}`)}\n`,
+                    `\n  ${bold(green('vitepress'))} ${green(`v${versions.vitepress}`)} ${dim('via')} ${bold(green('vite-plugin-local'))} ${green(`v${versions['vite-plugin-local']}`)}\n`,
                   )
                 }
                 else {
                   console.log(
-                    `\n  ${colors.bold(colors.green('vite'))} ${colors.green(`v${versions.vite}`)} via ${colors.bold(colors.green('vite-plugin-local'))} ${colors.green(`v${versions['vite-plugin-local']}`)}\n`,
+                    `\n  ${bold(green('vite'))} ${green(`v${versions.vite}`)} ${dim('via')} ${bold(green('vite-plugin-local'))} ${green(`v${versions['vite-plugin-local']}`)}\n`,
                   )
                 }
 
-                console.log(`  ${colors.green('➜')}  ${colors.bold('Local')}:   ${colorUrl(localUrl)}`)
-                console.log(`  ${colors.green('➜')}  ${colors.bold('Proxied')}: ${colorUrl(proxiedUrl)}`)
+                console.log(`  ${green('➜')}  ${bold('Local')}:   ${colorUrl(localUrl)}`)
+                console.log(`  ${green('➜')}  ${bold('Proxied')}: ${colorUrl(proxiedUrl)}`)
 
                 if (options.https) {
-                  console.log(`  ${colors.green('➜')}  ${colors.bold('SSL')}:     ${colors.dim('TLS 1.2/1.3, HTTP/2')}`)
+                  console.log(`  ${green('➜')}  ${bold('SSL')}:     ${dim('TLS 1.2/1.3, HTTP/2')}`)
                 }
 
                 console.log(
-                  colors.dim(`  ${colors.green('➜')}  ${colors.bold('Network')}: use `)
-                  + colors.bold('--host')
-                  + colors.dim(' to expose'),
+                  dim(`  ${green('➜')}  ${bold('Network')}: use `)
+                  + bold('--host')
+                  + dim(' to expose'),
                 )
 
-                console.log(`\n  ${colors.green('➜')}  ${dim('press')} ${colors.bold('h')} ${dim('to show help')}\n`)
+                console.log(`\n  ${green(dim('➜'))}  ${dim('press')} ${bold('h')} ${dim('to show help')}\n`)
               }
 
               server.printUrls()
