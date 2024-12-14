@@ -8,7 +8,7 @@
 
 # Local Development
 
-> A smart reverse proxy for local development, with HTTPS support & other goodies.
+> A smart Vite plugin that enables pretty development URLs, including HTTPS.
 
 ## Features
 
