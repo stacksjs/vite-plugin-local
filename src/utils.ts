@@ -23,9 +23,9 @@ export function buildConfig(options: VitePluginLocalOptions, serverUrl?: string)
     to: options.domain,
     https: options.https === true
       ? httpsConfig({
-        ...options,
-        to: options.domain,
-      })
+          ...options,
+          to: options.domain,
+        })
       : options.https || false,
     cleanup: options.cleanup ?? true,
     cleanUrls: options.cleanUrls ?? false,
