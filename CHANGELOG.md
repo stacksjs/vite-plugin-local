@@ -1,6 +1,80 @@
 # Changelog
 
 
+## v0.1.1...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.1.1...main)
+
+### 🚀 Enhancements
+
+- Add cleanUrls support ([a9a33d0](https://github.com/stacksjs/vite-plugin-local/commit/a9a33d0))
+
+### 🏡 Chore
+
+- Adjust readme ([1fc83ce](https://github.com/stacksjs/vite-plugin-local/commit/1fc83ce))
+- Adjust links ([4bc4e44](https://github.com/stacksjs/vite-plugin-local/commit/4bc4e44))
+- Adjust docs scripts ([292d3b7](https://github.com/stacksjs/vite-plugin-local/commit/292d3b7))
+- Use bun option ([a5c6270](https://github.com/stacksjs/vite-plugin-local/commit/a5c6270))
+- Ensure to set to option ([c2feb2b](https://github.com/stacksjs/vite-plugin-local/commit/c2feb2b))
+- Set local domain ([7f3d16f](https://github.com/stacksjs/vite-plugin-local/commit/7f3d16f))
+- Update readme ([dc0ae3d](https://github.com/stacksjs/vite-plugin-local/commit/dc0ae3d))
+- Adjust docs ([c62a2af](https://github.com/stacksjs/vite-plugin-local/commit/c62a2af))
+- Adjust build ([2f7fb86](https://github.com/stacksjs/vite-plugin-local/commit/2f7fb86))
+- Update docs ([fe63439](https://github.com/stacksjs/vite-plugin-local/commit/fe63439))
+- Update docs ([a2981a0](https://github.com/stacksjs/vite-plugin-local/commit/a2981a0))
+- Adjust links ([ab6d1e6](https://github.com/stacksjs/vite-plugin-local/commit/ab6d1e6))
+- Update docs ([4e3c311](https://github.com/stacksjs/vite-plugin-local/commit/4e3c311))
+- Lint ([02a203d](https://github.com/stacksjs/vite-plugin-local/commit/02a203d))
+- Add default docs theme ([87a642b](https://github.com/stacksjs/vite-plugin-local/commit/87a642b))
+- Update cover ([b7d896a](https://github.com/stacksjs/vite-plugin-local/commit/b7d896a))
+- Handle process exit differently ([ca2b087](https://github.com/stacksjs/vite-plugin-local/commit/ca2b087))
+- Improve output ([d295b03](https://github.com/stacksjs/vite-plugin-local/commit/d295b03))
+- Add cleanup options ([e2bc590](https://github.com/stacksjs/vite-plugin-local/commit/e2bc590))
+- Use named imports ([4e9195c](https://github.com/stacksjs/vite-plugin-local/commit/4e9195c))
+- Improve exit handling ([237fa54](https://github.com/stacksjs/vite-plugin-local/commit/237fa54))
+- Resolve type issues ([1918fa9](https://github.com/stacksjs/vite-plugin-local/commit/1918fa9))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
+## v0.1.1...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.1.1...main)
+
+### 🚀 Enhancements
+
+- Add cleanUrls support ([a9a33d0](https://github.com/stacksjs/vite-plugin-local/commit/a9a33d0))
+
+### 🏡 Chore
+
+- Adjust readme ([1fc83ce](https://github.com/stacksjs/vite-plugin-local/commit/1fc83ce))
+- Adjust links ([4bc4e44](https://github.com/stacksjs/vite-plugin-local/commit/4bc4e44))
+- Adjust docs scripts ([292d3b7](https://github.com/stacksjs/vite-plugin-local/commit/292d3b7))
+- Use bun option ([a5c6270](https://github.com/stacksjs/vite-plugin-local/commit/a5c6270))
+- Ensure to set to option ([c2feb2b](https://github.com/stacksjs/vite-plugin-local/commit/c2feb2b))
+- Set local domain ([7f3d16f](https://github.com/stacksjs/vite-plugin-local/commit/7f3d16f))
+- Update readme ([dc0ae3d](https://github.com/stacksjs/vite-plugin-local/commit/dc0ae3d))
+- Adjust docs ([c62a2af](https://github.com/stacksjs/vite-plugin-local/commit/c62a2af))
+- Adjust build ([2f7fb86](https://github.com/stacksjs/vite-plugin-local/commit/2f7fb86))
+- Update docs ([fe63439](https://github.com/stacksjs/vite-plugin-local/commit/fe63439))
+- Update docs ([a2981a0](https://github.com/stacksjs/vite-plugin-local/commit/a2981a0))
+- Adjust links ([ab6d1e6](https://github.com/stacksjs/vite-plugin-local/commit/ab6d1e6))
+- Update docs ([4e3c311](https://github.com/stacksjs/vite-plugin-local/commit/4e3c311))
+- Lint ([02a203d](https://github.com/stacksjs/vite-plugin-local/commit/02a203d))
+- Add default docs theme ([87a642b](https://github.com/stacksjs/vite-plugin-local/commit/87a642b))
+- Update cover ([b7d896a](https://github.com/stacksjs/vite-plugin-local/commit/b7d896a))
+- Handle process exit differently ([ca2b087](https://github.com/stacksjs/vite-plugin-local/commit/ca2b087))
+- Improve output ([d295b03](https://github.com/stacksjs/vite-plugin-local/commit/d295b03))
+- Add cleanup options ([e2bc590](https://github.com/stacksjs/vite-plugin-local/commit/e2bc590))
+- Use named imports ([4e9195c](https://github.com/stacksjs/vite-plugin-local/commit/4e9195c))
+- Improve exit handling ([237fa54](https://github.com/stacksjs/vite-plugin-local/commit/237fa54))
+- Resolve type issues ([1918fa9](https://github.com/stacksjs/vite-plugin-local/commit/1918fa9))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## v0.1.0...main
 
 [compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.1.0...main)
