@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import process from 'node:process'
 import { promisify } from 'node:util'
+// @ts-expect-error dtsx issues
 import { checkExistingCertificates, checkHosts, cleanup, startProxies } from '@stacksjs/rpx'
 import { bold, cyan, dim, green } from 'picocolors'
 import packageJson from '../package.json'
@@ -84,7 +85,7 @@ async function needsSudoAccess(options: VitePluginLocalOptions, domain: string):
       if (!hostsExist[0]) {
         try {
           // Try to write a test file to check permissions
-          await execAsync('touch /etc/hosts', { stdio: 'ignore' })
+          await execAsync('touch /etc/hosts')
           return false
         }
         catch {
