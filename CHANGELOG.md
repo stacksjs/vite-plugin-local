@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.2.0...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.2.0...main)
+
+### 🏡 Chore
+
+- Improve sudo handling ([a4a991b](https://github.com/stacksjs/vite-plugin-local/commit/a4a991b))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## v0.1.1...main
 
 [compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.1.1...main)
