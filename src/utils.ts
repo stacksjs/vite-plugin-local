@@ -14,7 +14,10 @@ export function getDefaultSSLConfig(): { caCertPath: string, certPath: string, k
   }
 }
 
-export function buildConfig(options: VitePluginLocalOptions, serverUrl: string): SingleReverseProxyConfig {
+export function buildConfig(options: VitePluginLocalOptions, serverUrl?: string): SingleReverseProxyConfig {
+  if (!serverUrl)
+    serverUrl = 'localhost:5173'
+
   return {
     from: serverUrl,
     to: options.domain,

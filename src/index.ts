@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import type { Plugin, ViteDevServer } from 'vite'
 import type { VitePluginLocalOptions } from './types'
-import { exec } from 'node:child_process'
+import { exec, spawn } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import process from 'node:process'
@@ -57,16 +57,6 @@ async function checkInitialSudo(): Promise<boolean> {
   }
 }
 
-async function getSudoAccess(): Promise<boolean> {
-  try {
-    await execAsync('sudo true')
-    return true
-  }
-  catch {
-    return false
-  }
-}
-
 async function needsSudoAccess(options: VitePluginLocalOptions, domain: string): Promise<boolean> {
   try {
     // Check if we need to generate certificates
@@ -85,7 +75,7 @@ async function needsSudoAccess(options: VitePluginLocalOptions, domain: string):
       if (!hostsExist[0]) {
         try {
           // Try to write a test file to check permissions
-          await execAsync('touch /etc/hosts')
+          await execAsync('sudo -n touch /etc/hosts')
           return false
         }
         catch {
@@ -119,6 +109,48 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
   let hasSudoAccess = false
   let cleanupPromise: Promise<void> | null = null
   let server: ViteDevServer | undefined
+
+  // sudo check in plugin initialization
+  let sudoPromise: Promise<void> | null = null
+
+  if (enabled) {
+    sudoPromise = (async () => {
+      const config = buildConfig(options)
+      const domain = config.to
+
+      const needsSudo = await needsSudoAccess(options, domain)
+      if (needsSudo) {
+        hasSudoAccess = await checkInitialSudo()
+
+        if (!hasSudoAccess) {
+          // Temporarily disable console.log to prevent VitePress output
+          const origLog = console.log
+          console.log = () => { }
+
+          process.stdout.write('\nSudo access required for proxy setup.\n')
+
+          // Get sudo access before VitePress starts
+          hasSudoAccess = await new Promise<boolean>((resolve) => {
+            const sudo = spawn('sudo', ['true'], {
+              stdio: 'inherit',
+            })
+
+            sudo.on('exit', (code) => {
+              resolve(code === 0)
+            })
+          })
+
+          // Restore console.log
+          console.log = origLog
+
+          if (!hasSudoAccess) {
+            console.error('Failed to get sudo access. Please try again.')
+            process.exit(1)
+          }
+        }
+      }
+    })()
+  }
 
   const debug = (...args: any[]) => {
     if (verbose)
@@ -183,9 +215,14 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
     name: 'vite-plugin-local',
     enforce: 'pre',
 
-    configureServer(viteServer: ViteDevServer) {
+    async configureServer(viteServer: ViteDevServer) {
       if (!enabled)
         return
+
+      // Wait for sudo access before continuing
+      if (sudoPromise) {
+        await sudoPromise
+      }
 
       server = viteServer
 
@@ -229,104 +266,73 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
         }
       })
 
-      const setupPlugin = async () => {
+      const setupProxy = async () => {
         try {
-          const config = buildConfig(options, 'localhost:5173')
-          const domain = config.to
+          const host = typeof server!.config.server.host === 'boolean'
+            ? 'localhost'
+            : server!.config.server.host || 'localhost'
 
-          // Check if we need sudo
-          const needsSudo = await needsSudoAccess(options, domain)
+          const port = server!.config.server.port || 5173
+          const serverUrl = `${host}:${port}`
 
-          if (needsSudo) {
-            debug('Sudo access required')
-            hasSudoAccess = await checkInitialSudo()
+          const config = buildConfig(options, serverUrl)
+          domains = [config.to]
+          proxyUrl = config.to
 
-            if (!hasSudoAccess) {
-              console.log('\nSudo access required for proxy setup.')
-              hasSudoAccess = await getSudoAccess()
+          debug('Starting proxies...')
 
-              if (!hasSudoAccess) {
-                console.error('Failed to get sudo access. Please try again.')
-                process.exit(1)
-              }
+          await startProxies(config)
+
+          server!.printUrls = function () {
+            const protocol = options.https ? 'https' : 'http'
+            const port = server!.config.server.port || 5173
+            const localUrl = `http://localhost:${port}/`
+            const proxiedUrl = `${protocol}://${proxyUrl}/`
+            const colorUrl = (url: string) =>
+              cyan(url.replace(/:(\d+)\//, (_, port) => `:${bold(port)}/`))
+
+            const versions = getPackageVersions()
+            if (versions.vitepress) {
+              console.log(
+                `\n  ${bold(green('vitepress'))} ${green(`v${versions.vitepress}`)} ${dim('via')} ${bold(green('vite-plugin-local'))} ${green(`v${versions['vite-plugin-local']}`)}\n`,
+              )
             }
+            else {
+              console.log(
+                `\n  ${bold(green('vite'))} ${green(`v${versions.vite}`)} ${dim('via')} ${bold(green('vite-plugin-local'))} ${green(`v${versions['vite-plugin-local']}`)}\n`,
+              )
+            }
+
+            console.log(`  ${green('➜')}  ${bold('Local')}:   ${colorUrl(localUrl)}`)
+            console.log(`  ${green('➜')}  ${bold('Proxied')}: ${colorUrl(proxiedUrl)}`)
+
+            if (options.https) {
+              console.log(`  ${green('➜')}  ${bold('SSL')}:     ${dim('TLS 1.2/1.3, HTTP/2')}`)
+            }
+
+            console.log(
+              dim(`  ${green('➜')}  ${bold('Network')}: use `)
+              + bold('--host')
+              + dim(' to expose'),
+            )
+
+            console.log(`\n  ${green(dim('➜'))}  ${dim('press')} ${bold('h')} ${dim('to show help')}\n`)
           }
 
-          const setupProxy = async () => {
-            try {
-              const host = typeof server!.config.server.host === 'boolean'
-                ? 'localhost'
-                : server!.config.server.host || 'localhost'
-
-              const port = server!.config.server.port || 5173
-              const serverUrl = `${host}:${port}`
-
-              const config = buildConfig(options, serverUrl)
-              domains = [config.to]
-              proxyUrl = config.to
-
-              debug('Starting proxies...')
-
-              await startProxies(config)
-
-              server!.printUrls = function () {
-                const protocol = options.https ? 'https' : 'http'
-                const port = server!.config.server.port || 5173
-                const localUrl = `http://localhost:${port}/`
-                const proxiedUrl = `${protocol}://${proxyUrl}/`
-                const colorUrl = (url: string) =>
-                  cyan(url.replace(/:(\d+)\//, (_, port) => `:${bold(port)}/`))
-
-                const versions = getPackageVersions()
-                if (versions.vitepress) {
-                  console.log(
-                    `\n  ${bold(green('vitepress'))} ${green(`v${versions.vitepress}`)} ${dim('via')} ${bold(green('vite-plugin-local'))} ${green(`v${versions['vite-plugin-local']}`)}\n`,
-                  )
-                }
-                else {
-                  console.log(
-                    `\n  ${bold(green('vite'))} ${green(`v${versions.vite}`)} ${dim('via')} ${bold(green('vite-plugin-local'))} ${green(`v${versions['vite-plugin-local']}`)}\n`,
-                  )
-                }
-
-                console.log(`  ${green('➜')}  ${bold('Local')}:   ${colorUrl(localUrl)}`)
-                console.log(`  ${green('➜')}  ${bold('Proxied')}: ${colorUrl(proxiedUrl)}`)
-
-                if (options.https) {
-                  console.log(`  ${green('➜')}  ${bold('SSL')}:     ${dim('TLS 1.2/1.3, HTTP/2')}`)
-                }
-
-                console.log(
-                  dim(`  ${green('➜')}  ${bold('Network')}: use `)
-                  + bold('--host')
-                  + dim(' to expose'),
-                )
-
-                console.log(`\n  ${green(dim('➜'))}  ${dim('press')} ${bold('h')} ${dim('to show help')}\n`)
-              }
-
-              server!.printUrls()
-              debug('Proxy setup complete')
-            }
-            catch (error) {
-              console.error('Failed to start reverse proxy:', error)
-              process.exit(1)
-            }
-          }
-
-          server?.httpServer?.once('listening', setupProxy)
-          if (server?.httpServer?.listening) {
-            debug('Server already listening, setting up proxy immediately')
-            await setupProxy()
-          }
+          server!.printUrls()
+          debug('Proxy setup complete')
         }
         catch (error) {
-          console.error('Failed to initialize plugin:', error)
+          console.error('Failed to start reverse proxy:', error)
           process.exit(1)
         }
       }
 
-      setupPlugin()
+      server.httpServer?.once('listening', setupProxy)
+      if (server.httpServer?.listening) {
+        debug('Server already listening, setting up proxy immediately')
+        await setupProxy()
+      }
     },
 
     // Add a closeBundle hook to ensure cleanup happens
