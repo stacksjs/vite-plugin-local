@@ -32,8 +32,7 @@ function getPackageVersions() {
     )
     viteVersion = JSON.parse(vitePackageJson).version
   }
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  catch (error) {
+  catch {
     // Fallback to package.json dependencies
     viteVersion = packageJson.devDependencies?.vite?.replace('^', '') || '0.0.0'
   }
@@ -46,6 +45,26 @@ function getPackageVersions() {
 }
 
 const execAsync = promisify(exec)
+
+async function checkInitialSudo(): Promise<boolean> {
+  try {
+    await execAsync('sudo -n true')
+    return true
+  }
+  catch {
+    return false
+  }
+}
+
+async function getSudoAccess(): Promise<boolean> {
+  try {
+    await execAsync('sudo true')
+    return true
+  }
+  catch {
+    return false
+  }
+}
 
 async function needsSudoAccess(options: VitePluginLocalOptions, domain: string): Promise<boolean> {
   try {
@@ -78,7 +97,7 @@ async function needsSudoAccess(options: VitePluginLocalOptions, domain: string):
   }
   catch (error) {
     console.error('Error checking sudo requirements:', error)
-    return false // Changed to false - if we can't check, don't assume we need sudo
+    return false // If we can't check, don't assume we need sudo
   }
 }
 
@@ -91,60 +110,83 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
       certs: false,
     },
   } = options
+
   let domains: string[] | undefined
   let proxyUrl: string | undefined
   let originalConsole: typeof console
-  let cleanupPromise: Promise<void> | null = null
   let isCleaningUp = false
+  let hasSudoAccess = false
+  let cleanupPromise: Promise<void> | null = null
+  let server: ViteDevServer | undefined
 
   const debug = (...args: any[]) => {
     if (verbose)
       originalConsole.log('[vite-plugin-local]', ...args)
   }
 
-  // Add cleanup handler for process exit
   const exitHandler = async () => {
-    if (domains?.length && !isCleaningUp) {
-      isCleaningUp = true
-      debug('Cleaning up...')
+    if (!domains?.length || isCleaningUp) {
+      debug('Skipping cleanup - no domains or already cleaning')
+      return
+    }
+
+    isCleaningUp = true
+    debug('Starting cleanup process')
+
+    try {
+      // Store the cleanup promise
       cleanupPromise = cleanup({
         domains,
         hosts: typeof cleanupOpts === 'boolean' ? cleanupOpts : cleanupOpts?.hosts,
         certs: typeof cleanupOpts === 'boolean' ? cleanupOpts : cleanupOpts?.certs,
         verbose,
       })
+
       await cleanupPromise
       domains = undefined
-      debug('Cleanup complete')
+      debug('Cleanup completed successfully')
+    }
+    catch (error) {
+      console.error('Error during cleanup:', error)
+      throw error // Re-throw to ensure process exits with error
+    }
+    finally {
       isCleaningUp = false
+      cleanupPromise = null
     }
   }
 
-  // Override the library's process.exit
-  const originalExit = process.exit
-  process.exit = ((code?: number) => {
-    if (cleanupPromise || domains?.length) {
-      exitHandler().finally(() => {
-        process.exit = originalExit
-        process.exit(code)
-      })
-      return undefined as never
-    }
-    return originalExit(code)
-  }) as (code?: number) => never
+  const handleSignal = async (signal: string) => {
+    debug(`Received ${signal}, initiating cleanup...`)
 
-  // Handle cleanup for different termination signals
-  process.on('SIGINT', exitHandler)
-  process.on('SIGTERM', exitHandler)
-  process.on('beforeExit', exitHandler)
+    try {
+      await exitHandler()
+      debug(`Cleanup after ${signal} completed successfully`)
+    }
+    catch (error) {
+      console.error(`Cleanup failed after ${signal}:`, error)
+      process.exit(1)
+    }
+
+    if (server?.httpServer) {
+      server.httpServer.close()
+    }
+
+    // Only exit if we're handling a signal
+    if (signal !== 'CLOSE') {
+      process.exit(0)
+    }
+  }
 
   return {
     name: 'vite-plugin-local',
     enforce: 'pre',
 
-    configureServer(server: ViteDevServer) {
+    configureServer(viteServer: ViteDevServer) {
       if (!enabled)
         return
+
+      server = viteServer
 
       // Override console.log immediately to prevent VitePress initial messages
       const originalLog = console.log
@@ -163,6 +205,29 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
 
       server.printUrls = () => { }
 
+      // Add cleanup handlers for the server
+      server.httpServer?.on('close', () => {
+        debug('Server closing, cleaning up...')
+        handleSignal('CLOSE')
+      })
+
+      // Register signal handlers
+      process.once('SIGINT', () => handleSignal('SIGINT'))
+      process.once('SIGTERM', () => handleSignal('SIGTERM'))
+      process.once('beforeExit', () => handleSignal('beforeExit'))
+      process.once('exit', async () => {
+        // If there's a pending cleanup, wait for it
+        if (cleanupPromise) {
+          try {
+            await cleanupPromise
+          }
+          catch (error) {
+            console.error('Cleanup failed during exit:', error)
+            process.exit(1)
+          }
+        }
+      })
+
       const setupPlugin = async () => {
         try {
           const config = buildConfig(options, 'localhost:5173')
@@ -173,27 +238,26 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
 
           if (needsSudo) {
             debug('Sudo access required')
-            // Only show sudo message if we actually need it
-            console.log('\nSudo access required for proxy setup.')
-            console.log('Please enter your password when prompted.\n')
+            hasSudoAccess = await checkInitialSudo()
 
-            try {
-              await execAsync('sudo true')
-            }
-            // eslint-disable-next-line unused-imports/no-unused-vars
-            catch (error) {
-              console.error('Failed to get sudo access. Please try again.')
-              process.exit(1)
+            if (!hasSudoAccess) {
+              console.log('\nSudo access required for proxy setup.')
+              hasSudoAccess = await getSudoAccess()
+
+              if (!hasSudoAccess) {
+                console.error('Failed to get sudo access. Please try again.')
+                process.exit(1)
+              }
             }
           }
 
           const setupProxy = async () => {
             try {
-              const host = typeof server.config.server.host === 'boolean'
+              const host = typeof server!.config.server.host === 'boolean'
                 ? 'localhost'
-                : server.config.server.host || 'localhost'
+                : server!.config.server.host || 'localhost'
 
-              const port = server.config.server.port || 5173
+              const port = server!.config.server.port || 5173
               const serverUrl = `${host}:${port}`
 
               const config = buildConfig(options, serverUrl)
@@ -204,9 +268,9 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
 
               await startProxies(config)
 
-              server.printUrls = function () {
+              server!.printUrls = function () {
                 const protocol = options.https ? 'https' : 'http'
-                const port = server.config.server.port || 5173
+                const port = server!.config.server.port || 5173
                 const localUrl = `http://localhost:${port}/`
                 const proxiedUrl = `${protocol}://${proxyUrl}/`
                 const colorUrl = (url: string) =>
@@ -240,7 +304,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
                 console.log(`\n  ${green(dim('➜'))}  ${dim('press')} ${bold('h')} ${dim('to show help')}\n`)
               }
 
-              server.printUrls()
+              server!.printUrls()
               debug('Proxy setup complete')
             }
             catch (error) {
@@ -249,8 +313,8 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
             }
           }
 
-          server.httpServer?.once('listening', setupProxy)
-          if (server.httpServer?.listening) {
+          server?.httpServer?.once('listening', setupProxy)
+          if (server?.httpServer?.listening) {
             debug('Server already listening, setting up proxy immediately')
             await setupProxy()
           }
@@ -261,7 +325,13 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
         }
       }
 
-      return setupPlugin()
+      setupPlugin()
+    },
+
+    // Add a closeBundle hook to ensure cleanup happens
+    async closeBundle() {
+      debug('Bundle closing, initiating cleanup...')
+      await handleSignal('CLOSE')
     },
   }
 }
