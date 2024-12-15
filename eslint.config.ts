@@ -1,6 +1,7 @@
+import type { ConfigNames, FlatConfigComposer, TypedFlatConfigItem } from '@stacksjs/eslint-config'
 import stacks from '@stacksjs/eslint-config'
 
-export default stacks({
+const config: FlatConfigComposer<TypedFlatConfigItem, ConfigNames> = stacks({
   stylistic: {
     indent: 2,
     quotes: 'single',
@@ -13,3 +14,5 @@ export default stacks({
     'fixtures/**',
   ],
 })
+
+export default config
