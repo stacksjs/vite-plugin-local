@@ -3,6 +3,11 @@
   "prettier.enable": false,
   "biome.enabled": false,
   "editor.formatOnSave": false,
+  "eslint.options": {
+    "flags": [
+      "unstable_ts_config"
+    ]
+  },
   // Auto fix
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",

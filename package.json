@@ -28,8 +28,8 @@
   "files": ["dist"],
   "scripts": {
     "build": "bun --bun build.ts",
-    "lint": "bunx eslint .",
-    "lint:fix": "bunx eslint . --fix",
+    "lint": "bunx eslint --flag unstable_ts_config .",
+    "lint:fix": "bunx eslint --flag unstable_ts_config . --fix",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
     "changelog": "bunx changelogen --output CHANGELOG.md",
     "prepublishOnly": "bun --bun run build",
@@ -41,7 +41,7 @@
     "preview:docs": "bun --bun vitepress preview docs"
   },
   "devDependencies": {
-    "@stacksjs/eslint-config": "^3.11.3-beta.4",
+    "@stacksjs/eslint-config": "^3.12.0-beta.2",
     "@stacksjs/rpx": "^0.8.0",
     "@types/bun": "^1.1.14",
     "bumpp": "^9.9.1",
@@ -57,6 +57,6 @@
     "pre-commit": "bun lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts}": "bunx eslint . --fix"
+    "*.{js,ts}": "bunx eslint --flag unstable_ts_config . --fix"
   }
 }
