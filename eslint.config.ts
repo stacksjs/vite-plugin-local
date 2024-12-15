@@ -1,7 +1,7 @@
-import type { ConfigNames, FlatConfigComposer, TypedFlatConfigItem } from '@stacksjs/eslint-config'
+import type { ESLintConfig } from '@stacksjs/eslint-config'
 import stacks from '@stacksjs/eslint-config'
 
-const config: FlatConfigComposer<TypedFlatConfigItem, ConfigNames> = stacks({
+const config: ESLintConfig = stacks({
   stylistic: {
     indent: 2,
     quotes: 'single',
