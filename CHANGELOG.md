@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.2.1...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.2.1...main)
+
+### 🏡 Chore
+
+- Lint ([981c0f4](https://github.com/stacksjs/vite-plugin-local/commit/981c0f4))
+- Adjust readme ([bb8ef64](https://github.com/stacksjs/vite-plugin-local/commit/bb8ef64))
+- Use ts eslint config ([421b51d](https://github.com/stacksjs/vite-plugin-local/commit/421b51d))
+- Export with explicit type ([4d5ba36](https://github.com/stacksjs/vite-plugin-local/commit/4d5ba36))
+- Use ESLintConfig type ([948d303](https://github.com/stacksjs/vite-plugin-local/commit/948d303))
+- Improve printUrl handling ([fdac645](https://github.com/stacksjs/vite-plugin-local/commit/fdac645))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## v0.2.0...main
 
 [compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.2.0...main)
