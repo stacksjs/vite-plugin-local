@@ -137,6 +137,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
     configResolved(resolvedConfig) {
       // Early exit if we're in build mode
       if (resolvedConfig.command === 'build')
+        // eslint-disable-next-line no-useless-return
         return
     },
 

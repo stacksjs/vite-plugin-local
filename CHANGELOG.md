@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v0.3.0...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.3.0...main)
+
+### 🏡 Chore
+
+- Add cleanup docs ([8e1332a](https://github.com/stacksjs/vite-plugin-local/commit/8e1332a))
+- Enhance docs ([9dec0c9](https://github.com/stacksjs/vite-plugin-local/commit/9dec0c9))
+- Adjust sudo check ([fdadacb](https://github.com/stacksjs/vite-plugin-local/commit/fdadacb))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+- Cab-mikee ([@cab-mikee](http://github.com/cab-mikee))
+
 ## v0.2.1...main
 
 [compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.2.1...main)
