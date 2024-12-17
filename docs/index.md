@@ -6,10 +6,11 @@ hero:
   name: "vite-plugin-local"
   text: "A better developer environment."
   tagline: "A smart reverse proxy for local development, with HTTPS support & other goodies."
+  image: /images/logo-white.png
   actions:
     - theme: brand
-      text: Documentation
-      link: /get-started
+      text: Get Started
+      link: /intro
     - theme: alt
       text: View on GitHub
       link: https://github.com/stacksjs/vite-plugin-local
@@ -28,3 +29,5 @@ features:
     icon: 🚀
     details: "Just a few lines of code to get started, with a lot of options to customize."
 ---
+
+<Home />

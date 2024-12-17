@@ -6,17 +6,8 @@ import process from 'node:process'
 import { promisify } from 'node:util'
 // @ts-expect-error dtsx issues
 import { checkExistingCertificates, checkHosts, cleanup, startProxies } from '@stacksjs/rpx'
-import { bold, cyan, dim, green, yellow } from 'picocolors'
+import { bold, cyan, dim, green } from 'picocolors'
 import { buildConfig } from './utils'
-
-const toggleComboKeysMap = {
-  option: process.platform === 'darwin' ? 'Option(⌥)' : 'Alt(⌥)',
-  meta: 'Command(⌘)',
-  shift: 'Shift(⇧)',
-}
-function normalizeComboKeyPrint(toggleComboKey: string) {
-  return toggleComboKey.split('-').map(key => toggleComboKeysMap[key] || key[0].toUpperCase() + key.slice(1)).join(dim('+'))
-}
 
 const execAsync = promisify(exec)
 
