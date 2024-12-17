@@ -2,47 +2,20 @@
 import type { Plugin, ViteDevServer } from 'vite'
 import type { VitePluginLocalOptions } from './types'
 import { exec, spawn } from 'node:child_process'
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
 import process from 'node:process'
 import { promisify } from 'node:util'
 // @ts-expect-error dtsx issues
 import { checkExistingCertificates, checkHosts, cleanup, startProxies } from '@stacksjs/rpx'
-import { bold, cyan, dim, green } from 'picocolors'
-import packageJson from '../package.json'
+import { bold, cyan, dim, green, yellow } from 'picocolors'
 import { buildConfig } from './utils'
 
-function getPackageVersions() {
-  let viteVersion
-  const vitePluginLocalVersion = packageJson.version
-  let vitePressVersion
-
-  try {
-    // Try to get VitePress version first
-    const vitePressPath = join(process.cwd(), 'node_modules', 'vitepress', 'package.json')
-    try {
-      const vitePressPackage = JSON.parse(readFileSync(vitePressPath, 'utf-8'))
-      vitePressVersion = vitePressPackage.version
-    }
-    catch { }
-
-    // Get Vite version
-    const vitePackageJson = readFileSync(
-      join(process.cwd(), 'node_modules', 'vite', 'package.json'),
-      'utf-8',
-    )
-    viteVersion = JSON.parse(vitePackageJson).version
-  }
-  catch {
-    // Fallback to package.json dependencies
-    viteVersion = packageJson.devDependencies?.vite?.replace('^', '') || '0.0.0'
-  }
-
-  return {
-    'vitepress': vitePressVersion,
-    'vite': viteVersion,
-    'vite-plugin-local': vitePluginLocalVersion,
-  }
+const toggleComboKeysMap = {
+  option: process.platform === 'darwin' ? 'Option(⌥)' : 'Alt(⌥)',
+  meta: 'Command(⌘)',
+  shift: 'Shift(⇧)',
+}
+function normalizeComboKeyPrint(toggleComboKey: string) {
+  return toggleComboKey.split('-').map(key => toggleComboKeysMap[key] || key[0].toUpperCase() + key.slice(1)).join(dim('+'))
 }
 
 const execAsync = promisify(exec)
@@ -129,7 +102,6 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
 
           process.stdout.write('\nSudo access required for proxy setup.\n')
 
-          // Get sudo access before VitePress starts
           hasSudoAccess = await new Promise<boolean>((resolve) => {
             const sudo = spawn('sudo', ['true'], {
               stdio: 'inherit',
@@ -226,22 +198,8 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
 
       server = viteServer
 
-      // Override console.log immediately to prevent VitePress initial messages
-      const originalLog = console.log
-      console.log = (...args) => {
-        if (typeof args[0] === 'string' && (
-          args[0].includes('vitepress v')
-          || args[0].includes('press h to show help')
-        )) {
-          return
-        }
-        originalLog.apply(console, args)
-      }
-
       // Store original console for debug
       originalConsole = { ...console }
-
-      server.printUrls = () => { }
 
       // Add cleanup handlers for the server
       server.httpServer?.on('close', () => {
@@ -254,7 +212,6 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
       process.once('SIGTERM', () => handleSignal('SIGTERM'))
       process.once('beforeExit', () => handleSignal('beforeExit'))
       process.once('exit', async () => {
-        // If there's a pending cleanup, wait for it
         if (cleanupPromise) {
           try {
             await cleanupPromise
@@ -266,13 +223,46 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
         }
       })
 
-      const setupProxy = async () => {
-        try {
-          const host = typeof server!.config.server.host === 'boolean'
-            ? 'localhost'
-            : server!.config.server.host || 'localhost'
+      const colorUrl = (url: string) =>
+        cyan(url.replace(/:(\d+)\//, (_, port) => `:${bold(port)}/`))
 
-          const port = server!.config.server.port || 5173
+      // Store the original printUrls function
+      const originalPrintUrls = server.printUrls
+
+      // Wrap the printUrls function to add our custom output while preserving other plugins' modifications
+      server.printUrls = () => {
+        if (!server?.resolvedUrls)
+          return
+
+        // Call the original printUrls function first
+        if (typeof originalPrintUrls === 'function') {
+          originalPrintUrls.call(server)
+        }
+        else {
+          // If no other plugin has modified printUrls, print the default local URL
+          console.log(`  ${green('➜')}  ${bold('Local')}:   ${colorUrl(server.resolvedUrls.local[0])}`)
+          console.log(`  ${green('➜')}  ${bold('Network')}: ${dim('use --host to expose')}`)
+        }
+
+        // Add our custom proxy URL information
+        if (proxyUrl) {
+          const protocol = options.https ? 'https' : 'http'
+          const proxiedUrl = `${protocol}://${proxyUrl}/`
+          console.log(`  ${green('➜')}  ${bold('Proxied URL')}: ${colorUrl(proxiedUrl)}`)
+
+          if (options.https) {
+            console.log(`  ${green('➜')}  ${bold('SSL')}: ${dim('TLS 1.2/1.3, HTTP/2')}`)
+          }
+        }
+      }
+
+      const startProxy = async () => {
+        try {
+          const host = typeof server?.config.server.host === 'boolean'
+            ? 'localhost'
+            : server?.config.server.host || 'localhost'
+
+          const port = server?.config.server.port || 5173
           const serverUrl = `${host}:${port}`
 
           const config = buildConfig(options, serverUrl)
@@ -280,46 +270,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
           proxyUrl = config.to
 
           debug('Starting proxies...')
-
           await startProxies(config)
-
-          server!.printUrls = function () {
-            const protocol = options.https ? 'https' : 'http'
-            const port = server!.config.server.port || 5173
-            const localUrl = `http://localhost:${port}/`
-            const proxiedUrl = `${protocol}://${proxyUrl}/`
-            const colorUrl = (url: string) =>
-              cyan(url.replace(/:(\d+)\//, (_, port) => `:${bold(port)}/`))
-
-            const versions = getPackageVersions()
-            if (versions.vitepress) {
-              console.log(
-                `\n  ${bold(green('vitepress'))} ${green(`v${versions.vitepress}`)} ${dim('via')} ${bold(green('vite-plugin-local'))} ${green(`v${versions['vite-plugin-local']}`)}\n`,
-              )
-            }
-            else {
-              console.log(
-                `\n  ${bold(green('vite'))} ${green(`v${versions.vite}`)} ${dim('via')} ${bold(green('vite-plugin-local'))} ${green(`v${versions['vite-plugin-local']}`)}\n`,
-              )
-            }
-
-            console.log(`  ${green('➜')}  ${bold('Local')}:   ${colorUrl(localUrl)}`)
-            console.log(`  ${green('➜')}  ${bold('Proxied')}: ${colorUrl(proxiedUrl)}`)
-
-            if (options.https) {
-              console.log(`  ${green('➜')}  ${bold('SSL')}:     ${dim('TLS 1.2/1.3, HTTP/2')}`)
-            }
-
-            console.log(
-              dim(`  ${green('➜')}  ${bold('Network')}: use `)
-              + bold('--host')
-              + dim(' to expose'),
-            )
-
-            console.log(`\n  ${green(dim('➜'))}  ${dim('press')} ${bold('h')} ${dim('to show help')}\n`)
-          }
-
-          server!.printUrls()
           debug('Proxy setup complete')
         }
         catch (error) {
@@ -328,10 +279,10 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
         }
       }
 
-      server.httpServer?.once('listening', setupProxy)
+      // Wait for the server to be ready before starting the proxy
+      server.httpServer?.once('listening', startProxy)
       if (server.httpServer?.listening) {
-        debug('Server already listening, setting up proxy immediately')
-        await setupProxy()
+        await startProxy()
       }
     },
 

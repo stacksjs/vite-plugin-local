@@ -28,8 +28,8 @@
   "files": ["dist"],
   "scripts": {
     "build": "bun --bun build.ts",
-    "lint": "bunx eslint --flag unstable_ts_config .",
-    "lint:fix": "bunx eslint --flag unstable_ts_config . --fix",
+    "lint": "bunx --bun eslint --flag unstable_ts_config .",
+    "lint:fix": "bunx --bun eslint --flag unstable_ts_config . --fix",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
     "changelog": "bunx changelogen --output CHANGELOG.md",
     "prepublishOnly": "bun --bun run build",
@@ -51,6 +51,7 @@
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.3",
+    "vite-plugin-vue-devtools": "^7.6.8",
     "vitepress": "^1.5.0"
   },
   "simple-git-hooks": {

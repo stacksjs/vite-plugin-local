@@ -1,3 +1,4 @@
+import VueDevTools from 'vite-plugin-vue-devtools'
 import { defineConfig } from 'vitepress'
 import Local from '../../src/index'
 
@@ -35,7 +36,7 @@ export default defineConfig({
     plugins: [
       // @ts-expect-error seems to be a bug in Vitepress not being ready for Vite 6 (?)
       Local({
-        domain: 'docs.local', // default: stacks.localhost
+        domain: 'stacks.localhost', // default: stacks.localhost
         https: true, // Use default SSL config, pass TlsConfig options to customize
         cleanup: {
           hosts: true, // Clean up relating /etc/hosts entry
@@ -43,6 +44,8 @@ export default defineConfig({
         },
         verbose: false, // Enable detailed logging
       }),
+
+      VueDevTools(),
     ],
   },
 })
