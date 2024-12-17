@@ -74,47 +74,6 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
   let cleanupPromise: Promise<void> | null = null
   let server: ViteDevServer | undefined
 
-  // sudo check in plugin initialization
-  let sudoPromise: Promise<void> | null = null
-
-  if (enabled) {
-    sudoPromise = (async () => {
-      const config = buildConfig(options)
-      const domain = config.to
-
-      const needsSudo = await needsSudoAccess(options, domain)
-      if (needsSudo) {
-        hasSudoAccess = await checkInitialSudo()
-
-        if (!hasSudoAccess) {
-          // Temporarily disable console.log to prevent VitePress output
-          const origLog = console.log
-          console.log = () => { }
-
-          process.stdout.write('\nSudo access required for proxy setup.\n')
-
-          hasSudoAccess = await new Promise<boolean>((resolve) => {
-            const sudo = spawn('sudo', ['true'], {
-              stdio: 'inherit',
-            })
-
-            sudo.on('exit', (code) => {
-              resolve(code === 0)
-            })
-          })
-
-          // Restore console.log
-          console.log = origLog
-
-          if (!hasSudoAccess) {
-            console.error('Failed to get sudo access. Please try again.')
-            process.exit(1)
-          }
-        }
-      }
-    })()
-  }
-
   const debug = (...args: any[]) => {
     if (verbose)
       originalConsole.log('[vite-plugin-local]', ...args)
@@ -130,7 +89,6 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
     debug('Starting cleanup process')
 
     try {
-      // Store the cleanup promise
       cleanupPromise = cleanup({
         domains,
         hosts: typeof cleanupOpts === 'boolean' ? cleanupOpts : cleanupOpts?.hosts,
@@ -144,7 +102,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
     }
     catch (error) {
       console.error('Error during cleanup:', error)
-      throw error // Re-throw to ensure process exits with error
+      throw error
     }
     finally {
       isCleaningUp = false
@@ -164,35 +122,64 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
       process.exit(1)
     }
 
-    if (server?.httpServer) {
+    if (server?.httpServer)
       server.httpServer.close()
-    }
 
-    // Only exit if we're handling a signal
-    if (signal !== 'CLOSE') {
+    if (signal !== 'CLOSE')
       process.exit(0)
-    }
   }
 
   return {
     name: 'vite-plugin-local',
     enforce: 'pre',
+    apply: 'serve',
+
+    configResolved(resolvedConfig) {
+      // Early exit if we're in build mode
+      if (resolvedConfig.command === 'build')
+        return
+    },
 
     async configureServer(viteServer: ViteDevServer) {
       if (!enabled)
         return
 
-      // Wait for sudo access before continuing
-      if (sudoPromise) {
-        await sudoPromise
-      }
-
       server = viteServer
-
-      // Store original console for debug
       originalConsole = { ...console }
 
-      // Add cleanup handlers for the server
+      // Move sudo check here
+      const config = buildConfig(options)
+      const domain = config.to
+
+      const needsSudo = await needsSudoAccess(options, domain)
+      if (needsSudo) {
+        hasSudoAccess = await checkInitialSudo()
+
+        if (!hasSudoAccess) {
+          const origLog = console.log
+          console.log = () => { }
+
+          process.stdout.write('\nSudo access required for proxy setup.\n')
+
+          hasSudoAccess = await new Promise<boolean>((resolve) => {
+            const sudo = spawn('sudo', ['true'], {
+              stdio: 'inherit',
+            })
+
+            sudo.on('exit', (code) => {
+              resolve(code === 0)
+            })
+          })
+
+          console.log = origLog
+
+          if (!hasSudoAccess) {
+            console.error('Failed to get sudo access. Please try again.')
+            process.exit(1)
+          }
+        }
+      }
+
       server.httpServer?.on('close', () => {
         debug('Server closing, cleaning up...')
         handleSignal('CLOSE')
