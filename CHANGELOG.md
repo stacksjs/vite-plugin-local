@@ -1,6 +1,24 @@
 # Changelog
 
 
+## v0.3.1...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.3.1...main)
+
+### 🏡 Chore
+
+- Config enhance ([3ca01c0](https://github.com/stacksjs/vite-plugin-local/commit/3ca01c0))
+- Use text lock file ([6eef0ce](https://github.com/stacksjs/vite-plugin-local/commit/6eef0ce))
+- Adjust og tags ([812d4a4](https://github.com/stacksjs/vite-plugin-local/commit/812d4a4))
+- Enhance docs ([1be13ed](https://github.com/stacksjs/vite-plugin-local/commit/1be13ed))
+- Minor updates ([735eba6](https://github.com/stacksjs/vite-plugin-local/commit/735eba6))
+- Dep updates ([7326e97](https://github.com/stacksjs/vite-plugin-local/commit/7326e97))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+- Cab-mikee ([@cab-mikee](http://github.com/cab-mikee))
+
 ## v0.3.0...main
 
 [compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.3.0...main)
