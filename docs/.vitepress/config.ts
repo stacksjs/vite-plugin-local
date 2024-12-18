@@ -133,7 +133,7 @@ export default withPwa(
       socialLinks: [
         { icon: 'twitter', link: 'https://twitter.com/stacksjs' },
         { icon: 'bluesky', link: 'https://bsky.app/profile/chrisbreuer.dev' },
-        { icon: 'github', link: 'https://github.com/stacksjs/stacks' },
+        { icon: 'github', link: 'https://github.com/stacksjs/vite-plugin-local' },
         { icon: 'discord', link: 'https://discord.gg/stacksjs' },
       ],
 
