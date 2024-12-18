@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.4.0...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.4.0...main)
+
+### 🏡 Chore
+
+- Update rpx ([ae2901e](https://github.com/stacksjs/vite-plugin-local/commit/ae2901e))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+
 ## v0.3.1...main
 
 [compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.3.1...main)
