@@ -44,7 +44,7 @@
     "@iconify-json/carbon": "^1.2.5",
     "@shikijs/vitepress-twoslash": "^1.24.2",
     "@stacksjs/eslint-config": "^3.12.0-beta.4",
-    "@stacksjs/rpx": "^0.9.0",
+    "@stacksjs/rpx": "^0.9.1",
     "@types/bun": "^1.1.14",
     "@vite-pwa/vitepress": "^0.5.3",
     "bumpp": "^9.9.1",
