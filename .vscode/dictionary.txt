@@ -17,6 +17,7 @@ destructurable
 dtsx
 entrypoints
 heroicons
+iconify
 lockb
 openweb
 outdir
@@ -25,12 +26,15 @@ Postcardware
 prefetch
 preinstall
 quickfix
+shikijs
 socio
 Solana
 Spatie
 stacksjs
 tlsx
+twoslash
 typecheck
+unocss
 unplugin
 unref
 upath

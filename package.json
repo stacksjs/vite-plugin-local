@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@stacksjs/eslint-config": "^3.12.0-beta.4",
-    "@stacksjs/rpx": "^0.8.0",
+    "@stacksjs/rpx": "^0.9.0",
     "@types/bun": "^1.1.14",
     "bumpp": "^9.9.1",
     "bun-plugin-dtsx": "^0.21.9",

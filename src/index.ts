@@ -6,7 +6,7 @@ import process from 'node:process'
 import { promisify } from 'node:util'
 // @ts-expect-error dtsx issues
 import { checkExistingCertificates, checkHosts, cleanup, startProxies } from '@stacksjs/rpx'
-import { bold, cyan, dim, green } from 'picocolors'
+import colors from 'picocolors'
 import { buildConfig } from './utils'
 
 const execAsync = promisify(exec)
@@ -202,8 +202,7 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
         }
       })
 
-      const colorUrl = (url: string) =>
-        cyan(url.replace(/:(\d+)\//, (_, port) => `:${bold(port)}/`))
+      const colorUrl = (url: string) => colors.cyan(url.replace(/:(\d+)\//, (_, port) => `:${colors.bold(port)}/`))
 
       // Store the original printUrls function
       const originalPrintUrls = server.printUrls
@@ -219,18 +218,18 @@ export function VitePluginLocal(options: VitePluginLocalOptions): Plugin {
         }
         else {
           // If no other plugin has modified printUrls, print the default local URL
-          console.log(`  ${green('➜')}  ${bold('Local')}:   ${colorUrl(server.resolvedUrls.local[0])}`)
-          console.log(`  ${green('➜')}  ${bold('Network')}: ${dim('use --host to expose')}`)
+          console.log(`  ${colors.green('➜')}  ${colors.bold('Local')}:   ${colorUrl(server.resolvedUrls.local[0])}`)
+          console.log(`  ${colors.green('➜')}  ${colors.bold('Network')}: ${colors.dim('use --host to expose')}`)
         }
 
         // Add our custom proxy URL information
         if (proxyUrl) {
           const protocol = options.https ? 'https' : 'http'
           const proxiedUrl = `${protocol}://${proxyUrl}/`
-          console.log(`  ${green('➜')}  ${bold('Proxied URL')}: ${colorUrl(proxiedUrl)}`)
+          console.log(`  ${colors.green('➜')}  ${colors.bold('Proxied URL')}: ${colorUrl(proxiedUrl)}`)
 
           if (options.https) {
-            console.log(`  ${green('➜')}  ${bold('SSL')}: ${dim('TLS 1.2/1.3, HTTP/2')}`)
+            console.log(`  ${colors.green('➜')}  ${colors.bold('SSL')}: ${colors.dim('TLS 1.2/1.3, HTTP/2')}`)
           }
         }
       }

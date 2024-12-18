@@ -1,3 +1,4 @@
+// @ts-expect-error dtsx issues
 import type { TlsConfig } from '@stacksjs/rpx'
 
 export interface VitePluginLocalOptions {
