@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.5",
-    "@shikijs/vitepress-twoslash": "^1.24.2",
+    "@shikijs/vitepress-twoslash": "^1.24.3",
     "@stacksjs/eslint-config": "^3.12.0-beta.4",
     "@stacksjs/rpx": "^0.9.1",
     "@types/bun": "^1.1.14",
@@ -62,7 +62,7 @@
     "vitepress": "^1.5.0"
   },
   "overrides": {
-    "unconfig": "0.3.10"
+    "unconfig": "0.6.0"
   },
   "simple-git-hooks": {
     "pre-commit": "bun lint-staged"
