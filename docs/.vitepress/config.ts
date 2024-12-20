@@ -48,6 +48,7 @@ const sidebar = [
     items: [
       { text: 'Introduction', link: '/intro' },
       { text: 'Installation', link: '/install' },
+      { text: 'Usage', link: '/usage' },
     ],
   },
 ]
@@ -56,7 +57,7 @@ export default withPwa(
   defineConfig({
     lang: 'en-US',
     title: 'vite-plugin-local',
-    description: 'A better developer environment.',
+    description: 'Pretty development URLs, and HTTPS. Zero config, zero setup.',
     cleanUrls: true,
     metaChunk: true,
 
@@ -66,7 +67,7 @@ export default withPwa(
       ['meta', { name: 'theme-color', content: '#0A0ABC' }],
       ['meta', { property: 'og:type', content: 'website' }],
       ['meta', { property: 'og:locale', content: 'en' }],
-      ['meta', { property: 'og:title', content: 'vite-plugin-local | A better developer environment.' }],
+      ['meta', { property: 'og:title', content: 'vite-plugin-local | Pretty development URLs, and HTTPS. Zero config, zero setup.' }],
       ['meta', { property: 'og:site_name', content: 'vite-plugin-local' }],
       ['meta', { property: 'og:image', content: './images/og-image.png' }],
       ['meta', { property: 'og:url', content: 'https://vite-plugin-local.netlify.app/' }],
