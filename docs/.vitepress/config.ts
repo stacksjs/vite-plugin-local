@@ -47,7 +47,7 @@ const sidebar = [
     text: 'Get Started',
     items: [
       { text: 'Introduction', link: '/intro' },
-      { text: 'Installation', link: '/install' },
+      { text: 'Install', link: '/install' },
       { text: 'Usage', link: '/usage' },
     ],
   },
