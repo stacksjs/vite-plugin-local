@@ -1,18 +1,49 @@
 # Install
 
-## Bun & Node.js
+Installing `vite-plugin-local` is easy. Simply pull it in via your package manager of choice.
 
-```bash
-npm install -d vite-plugin-local
-#bun install -d @stacksjs/vite-plugin-local
+::: code-group
 
-# or, invoke immediately
-bunx vite-plugin-local
-npx vite-plugin-local
+```bash [npm]
+npm install --save-dev vite-plugin-local
+
+# or, install via
+# npm i -d vite-plugin-local
 ```
 
-_We are looking to publish this package npm under the name `vite-plugin-local`. We are also hoping npm will release the name for us._
+```bash [bun]
+bun install --dev vite-plugin-local
 
-## Binaries
+# or, install via
+# bun add --dev vite-plugin-local
+# bun i -d vite-plugin-local
+```
 
-For now, you can download the `vite-plugin-local` binaries from the [releases page](https://github.com/stacksjs/vite-plugin-local/releases/tag/v0.4.1). Choose the binary that matches your platform and architecture:
+```bash [yarn]
+yarn add --dev vite-plugin-local
+
+# or, install via
+# yarn i -d vite-plugin-local
+```
+
+:::
+
+## Usage
+
+This minimal usage example shows how to use `vite-plugin-local` in your Vite configuration, using the plugin’s default settings.
+
+```javascript
+// vite.config.{js,ts}
+import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
+import local from 'vite-plugin-local'
+
+export default defineConfig({
+  plugins: [
+    vue(), // svelte(), react(), ...
+    local()
+  ]
+})
+```
+
+To read about the more elaborate usage API, check out the the following page in our documentation.

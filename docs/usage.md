@@ -1,7 +1,9 @@
 # Usage
 
+Using this plugin is as simple as defining it in your Vite configuration.
+
 ```ts
-// vite.config.ts
+// vite.config.{ts,js}
 import { defineConfig } from 'vite'
 import Local from 'vite-plugin-local'
 
@@ -21,4 +23,4 @@ export default defineConfig({
 })
 ```
 
-To learn more, head over to the [documentation](https://docs.stackjs.org/).
+To read about all of the available config options, check out the [config](/config) part of our documentation.

@@ -1,12 +1,19 @@
-// @ts-expect-error dtsx issues
-import type { TlsConfig } from '@stacksjs/rpx'
+# Configuration
 
-export interface VitePluginLocalOptions {
+The plugin can be configured with the following options:
+
+```ts
+// vite.config.ts
+import type { LocalConfig } from 'vite-plugin-local'
+import { defineConfig } from 'vite'
+import Local from 'vite-plugin-local'
+
+const config: LocalConfig = {
   /**
    * Enable/disable the plugin
    * @default true
    */
-  enabled?: boolean
+  enabled: true,
 
   /**
    * The target domain to proxy to (e.g., 'my-app.localhost')
@@ -14,7 +21,7 @@ export interface VitePluginLocalOptions {
    * @example 'example.com'
    * @default 'stacks.localhost'
    */
-  domain: string
+  domain: 'my-app.local', // default: stacks.localhost
 
   /**
    * SSL/TLS configuration
@@ -22,8 +29,9 @@ export interface VitePluginLocalOptions {
    * - false: disables SSL
    * - object: custom SSL configuration
    * @default false
+   * @example true
    */
-  https?: boolean | TlsConfig
+  https: true, // default: true, pass TlsConfig options for custom certificates
 
   /**
    * Cleanup options
@@ -33,10 +41,10 @@ export interface VitePluginLocalOptions {
    * @default { hosts: true, certs: false }
    * @example { hosts: true, certs: true }
    */
-  cleanup?: boolean | {
-    hosts?: boolean
-    certs?: boolean
-  }
+  cleanup: {
+    certs: true, // default: false, cleans up the certificates created on server shutdown
+    hosts: true, // default: true, cleans up /etc/hosts on server shutdown
+  },
 
   /**
    * By default, VitePress resolves inbound links to URLs ending with .html.
@@ -44,13 +52,18 @@ export interface VitePluginLocalOptions {
    * for example, example.com/path instead of example.com/path.html.
    * @default false
    */
-  cleanUrls?: boolean
+  cleanUrls: true, // default: false, cleans up URLs by not requiring the .html extension
 
   /**
    * Enable verbose logging
    * @default false
    */
-  verbose?: boolean
+  verbose: true, // default: false, enables detailed logging
 }
 
-export type { TlsConfig }
+export default defineConfig({
+  plugins: [
+    Local(config)
+  ]
+})
+```

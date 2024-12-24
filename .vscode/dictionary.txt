@@ -3,6 +3,7 @@ biomejs
 bluesky
 booleanish
 bumpp
+bunfig
 bunx
 changelogen
 changelogithub
@@ -18,6 +19,7 @@ dtsx
 entrypoints
 heroicons
 iconify
+localtunnels
 lockb
 openweb
 outdir
@@ -27,9 +29,11 @@ prefetch
 preinstall
 quickfix
 shikijs
+shoutout
 socio
 Solana
 Spatie
+sponsorware
 stacksjs
 tlsx
 twoslash

@@ -54,8 +54,8 @@ export default defineConfig({
       domain: 'stacks.localhost', // default: stacks.localhost
       https: true, // Use default SSL config, pass TlsConfig options to customize
       cleanup: {
-        hosts: true, // Clean up relating /etc/hosts entry
-        certs: false, // Clean up relating SSL certificates
+        hosts: true, // Clean up/remove relating /etc/hosts entry
+        certs: false, // Clean up/remove generated SSL certificates
       },
       verbose: false, // Enable detailed logging
     }),
