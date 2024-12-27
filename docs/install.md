@@ -19,6 +19,13 @@ bun install --dev vite-plugin-local
 # bun i -d vite-plugin-local
 ```
 
+```bash [pnpm]
+pnpm add --save-dev vite-plugin-local
+
+# or, install via
+# pnpm i -d vite-plugin-local
+```
+
 ```bash [yarn]
 yarn add --dev vite-plugin-local
 
