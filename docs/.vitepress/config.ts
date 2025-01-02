@@ -82,6 +82,9 @@ export default withPwa(
     ],
 
     themeConfig: {
+      search: {
+        provider: 'local',
+      },
       logo: {
         light: './images/logo-transparent.svg',
         dark: './images/logo-white-transparent.svg',
