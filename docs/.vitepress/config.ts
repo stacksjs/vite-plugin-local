@@ -56,6 +56,7 @@ export default withPwa(
     title: 'vite-plugin-local',
     description: 'Pretty development URLs, and HTTPS. Zero config, zero setup.',
     cleanUrls: true,
+    lastUpdated: true,
     metaChunk: true,
 
     head: [
