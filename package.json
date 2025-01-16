@@ -28,8 +28,8 @@
   "files": ["dist"],
   "scripts": {
     "build": "bun --bun build.ts",
-    "lint": "bunx --bun eslint --flag unstable_ts_config .",
-    "lint:fix": "bunx --bun eslint --flag unstable_ts_config . --fix",
+    "lint": "bunx --bun eslint .",
+    "lint:fix": "bunx --bun eslint . --fix",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
     "changelog": "bunx changelogen --output CHANGELOG.md",
     "prepublishOnly": "bun --bun run build",
@@ -42,18 +42,18 @@
   },
   "devDependencies": {
     "@iconify-json/carbon": "^1.2.5",
-    "@shikijs/vitepress-twoslash": "^1.26.1",
-    "@stacksjs/eslint-config": "^3.12.0-beta.4",
+    "@shikijs/vitepress-twoslash": "^1.27.2",
+    "@stacksjs/eslint-config": "^3.13.1-beta.2",
     "@stacksjs/rpx": "^0.9.1",
     "@types/bun": "^1.1.16",
     "@vite-pwa/vitepress": "^0.5.3",
-    "bumpp": "^9.10.0",
+    "bumpp": "^9.10.1",
     "bun-plugin-dtsx": "^0.21.9",
     "changelogen": "^0.5.7",
-    "lint-staged": "^15.3.0",
+    "lint-staged": "^15.4.1",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.7.3",
-    "unocss": "^65.4.0",
+    "unocss": "^65.4.2",
     "unplugin-icons": "^22.0.0",
     "unplugin-vue-components": "^28.0.0",
     "vite": "^6.0.7",
@@ -68,6 +68,6 @@
     "pre-commit": "bun lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts}": "bunx eslint --flag unstable_ts_config . --fix"
+    "*.{js,ts}": "bunx eslint . --fix"
   }
 }
