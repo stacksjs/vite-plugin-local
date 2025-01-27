@@ -6,7 +6,7 @@
 <!-- [![npm downloads][npm-downloads-src]][npm-downloads-href] -->
 <!-- [![Codecov][codecov-src]][codecov-href] -->
 
-# Local Development
+# vite-plugin-local
 
 > A smart Vite plugin that enables pretty development URLs, including HTTPS.
 
