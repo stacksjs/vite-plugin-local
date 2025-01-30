@@ -12,11 +12,12 @@
 
 ## Features
 
+- Proxies HTTP/HTTPS requests
 - Pretty development URLs
 - Smart HTTPS management
 - Automatically cleans URLs
 - Lightweight
-- _Soon: Local Tunneling_
+- _Soon: Local Tunneling & WebSocket Proxying_
 
 ## Install
 
