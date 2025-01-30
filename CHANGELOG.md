@@ -1,6 +1,43 @@
 # Changelog
 
 
+## v0.4.1...main
+
+[compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.4.1...main)
+
+### 📖 Documentation
+
+- Add analytics ([ab9867b](https://github.com/stacksjs/vite-plugin-local/commit/ab9867b))
+- Added usage ([c3b7ca2](https://github.com/stacksjs/vite-plugin-local/commit/c3b7ca2))
+- Enhance sidebar ([71e64ef](https://github.com/stacksjs/vite-plugin-local/commit/71e64ef))
+- Add pnpm install section ([91ee272](https://github.com/stacksjs/vite-plugin-local/commit/91ee272))
+- Adjust code theme ([46d3e2a](https://github.com/stacksjs/vite-plugin-local/commit/46d3e2a))
+- Improve showcase ([af09bfe](https://github.com/stacksjs/vite-plugin-local/commit/af09bfe))
+- Enable lastUpdated ([1d7eddb](https://github.com/stacksjs/vite-plugin-local/commit/1d7eddb))
+- Improve showcase ([40ba939](https://github.com/stacksjs/vite-plugin-local/commit/40ba939))
+- Improve sponsors ([85cb0b3](https://github.com/stacksjs/vite-plugin-local/commit/85cb0b3))
+
+### 🏡 Chore
+
+- Enhance team css ([0a62819](https://github.com/stacksjs/vite-plugin-local/commit/0a62819))
+- Enhance css ([bfbb91d](https://github.com/stacksjs/vite-plugin-local/commit/bfbb91d))
+- Temporarily downgrade vite ([f181f1e](https://github.com/stacksjs/vite-plugin-local/commit/f181f1e))
+- Upgrade unocss and vite ([2851568](https://github.com/stacksjs/vite-plugin-local/commit/2851568))
+- Several minor updates & improvements ([71ef5e1](https://github.com/stacksjs/vite-plugin-local/commit/71ef5e1))
+- Update renovate config ([b8c0a1b](https://github.com/stacksjs/vite-plugin-local/commit/b8c0a1b))
+- Minor updates ([32857f6](https://github.com/stacksjs/vite-plugin-local/commit/32857f6))
+- Update meta images ([2242792](https://github.com/stacksjs/vite-plugin-local/commit/2242792))
+- Update bun ([fa8dafd](https://github.com/stacksjs/vite-plugin-local/commit/fa8dafd))
+- Update readme ([bb20c11](https://github.com/stacksjs/vite-plugin-local/commit/bb20c11))
+- Update deps ([778f2f4](https://github.com/stacksjs/vite-plugin-local/commit/778f2f4))
+- Update readme ([0f4dc98](https://github.com/stacksjs/vite-plugin-local/commit/0f4dc98))
+- Update deps ([61e95d4](https://github.com/stacksjs/vite-plugin-local/commit/61e95d4))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
+- Cab-mikee ([@cab-mikee](http://github.com/cab-mikee))
+
 ## v0.4.0...main
 
 [compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.4.0...main)

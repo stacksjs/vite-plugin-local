@@ -1,7 +1,7 @@
 {
   "name": "vite-plugin-local",
   "type": "module",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "A Vite plugin to enable a development environment for minimalists.",
   "author": "Chris Breuer <chris@stacksjs.org>",
   "license": "MIT",
@@ -65,7 +65,7 @@
     "unconfig": "0.3.10"
   },
   "simple-git-hooks": {
-    "pre-commit": "bun lint-staged"
+    "pre-commit": "bunx lint-staged"
   },
   "lint-staged": {
     "*.{js,ts}": "bunx eslint . --fix"
