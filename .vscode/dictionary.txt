@@ -1,4 +1,5 @@
 antfu
+audiox
 biomejs
 bluesky
 booleanish
@@ -15,10 +16,13 @@ davidanson
 degit
 deps
 destructurable
+dnsx
 dtsx
 entrypoints
 heroicons
+httx
 iconify
+imgx
 localtunnels
 lockb
 openweb
@@ -43,6 +47,7 @@ unocss
 unplugin
 unref
 upath
+vidx
 vite
 vitebook
 vitejs
