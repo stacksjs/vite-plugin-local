@@ -1,0 +1,50 @@
+---
+description: General information based on the latest ./README.md content
+globs: 
+---
+Update it if APIs change:
+
+# vite-plugin-local
+
+> A smart Vite plugin that enables pretty development URLs, including HTTPS.
+
+## Features
+
+- Proxies HTTP/HTTPS requests
+- Pretty development URLs
+- Smart HTTPS management
+- Automatically cleans URLs
+- Lightweight
+- _Soon: Local Tunneling & WebSocket Proxying_
+
+## Install
+
+```bash
+npm install -d vite-plugin-local
+# bun install -d vite-plugin-local
+```
+
+## Get Started
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite'
+import Local from 'vite-plugin-local'
+
+export default defineConfig({
+  plugins: [
+    Local({
+      domain: 'my-app.local', // default: stacks.localhost
+      https: true, // default: true, pass TlsConfig options for custom certificates
+      cleanup: {
+        certs: true, // default: false, cleans up the certificates created on server shutdown
+        hosts: true, // default: true, cleans up /etc/hosts on server shutdown
+      },
+      cleanUrls: true, // default: false, cleans up URLs by not requiring the .html extension
+      verbose: true, // default: false, enables detailed logging
+    })
+  ]
+})
+```
+
+To learn more, head over to the [documentation](mdc:https:/docs.stackjs.org).
