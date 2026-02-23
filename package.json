@@ -78,6 +78,6 @@
     "pre-commit": "bunx lint-staged"
   },
   "lint-staged": {
-    "*.{js,ts}": "bunx eslint . --fix"
+    "*.{js,ts}": "bunx --bun pickier lint --fix"
   }
 }
