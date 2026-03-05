@@ -44,8 +44,8 @@
   ],
   "scripts": {
     "build": "bun --bun build.ts",
-    "lint": "bunx --bun pickier lint .",
-    "lint:fix": "bunx --bun pickier lint . --fix",
+    "lint": "bunx --bun pickier .",
+    "lint:fix": "bunx --bun pickier . --fix",
     "fresh": "bunx rimraf node_modules/ bun.lock && bun i",
     "changelog": "bunx changelogen --output CHANGELOG.md",
     "prepublishOnly": "bun --bun run build",
@@ -55,8 +55,8 @@
     "dev:docs": "bun --bun vitepress dev docs",
     "build:docs": "bun --bun vitepress build docs",
     "preview:docs": "bun --bun vitepress preview docs",
-    "format": "bunx --bun pickier format .",
-    "format:fix": "bunx --bun pickier format . --write"
+    "format": "bunx --bun pickier . --format",
+    "format:fix": "bunx --bun pickier . --format --write"
   },
   "devDependencies": {
     "@stacksjs/docs": "^0.69.3",
