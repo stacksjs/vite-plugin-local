@@ -2,7 +2,7 @@
 
 ## About
 
-A Vite plugin to enable a development environment for minimalists.
+A Vite plugin that enables pretty custom development URLs (e.g. `my-app.local`) with smart HTTPS management, including automatic certificate creation and cleanup. It proxies HTTP/HTTPS requests, supports clean URLs (no `.html` extension required), and manages `/etc/hosts` entries automatically. Configuration is done via the `Local()` plugin in `vite.config.ts`.
 
 ## Linting
 
