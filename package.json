@@ -61,7 +61,7 @@
   "devDependencies": {
     "@stacksjs/docs": "^0.69.3",
     "@stacksjs/rpx": "^0.10.0",
-    "better-dx": "^0.2.5",
+    "better-dx": "^0.2.7",
     "bumpp": "^10.0.3",
     "changelogen": "^0.5.7",
     "lint-staged": "^15.4.3",
