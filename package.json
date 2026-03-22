@@ -59,7 +59,6 @@
     "format:fix": "bunx --bun pickier . --format --write"
   },
   "devDependencies": {
-    "@stacksjs/docs": "^0.69.3",
     "@stacksjs/rpx": "^0.10.0",
     "better-dx": "^0.2.7",
     "bumpp": "^10.0.3",
