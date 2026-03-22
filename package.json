@@ -59,13 +59,13 @@
     "format:fix": "bunx --bun pickier . --format --write"
   },
   "devDependencies": {
-    "@stacksjs/rpx": "^0.10.0",
+    "@stacksjs/rpx": "^0.11.2",
     "better-dx": "^0.2.7",
-    "bumpp": "^10.0.3",
-    "changelogen": "^0.5.7",
-    "vite": "^6.1.0",
-    "vite-plugin-vue-devtools": "^7.7.2",
-    "vitepress": "^1.6.3"
+    "bumpp": "^10.4.1",
+    "changelogen": "^0.6.2",
+    "vite": "^6.4.1",
+    "vite-plugin-vue-devtools": "^7.7.9",
+    "vitepress": "^1.6.4"
   },
   "overrides": {
     "unconfig": "0.3.10"
