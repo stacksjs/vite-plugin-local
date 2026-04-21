@@ -1,6 +1,5 @@
 # Changelog
 
-
 ## v0.4.1...main
 
 [compare changes](https://github.com/stacksjs/vite-plugin-local/compare/v0.4.1...main)
@@ -200,7 +199,6 @@
 
 ## ...main
 
-
 ### 🏡 Chore
 
 - Initial commit ([cc5b019](https://github.com/stacksjs/vite-plugin-local/commit/cc5b019))
@@ -213,4 +211,3 @@
 ### ❤️ Contributors
 
 - Chris ([@chrisbbreuer](http://github.com/chrisbbreuer))
-

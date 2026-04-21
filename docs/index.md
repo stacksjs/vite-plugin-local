@@ -29,5 +29,3 @@ features:
     icon: 🚀
     details: "Just a few lines of code to get started, with a lot of options to customize."
 ---
-
-<Home />

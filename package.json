@@ -67,9 +67,6 @@
     "vite-plugin-vue-devtools": "^7.7.2",
     "vitepress": "^1.6.3"
   },
-  "overrides": {
-    "unconfig": "0.3.10"
-  },
   "git-hooks": {
     "pre-commit": {
       "staged-lint": {
