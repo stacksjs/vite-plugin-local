@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@stacksjs/rpx": "^0.10.0",
-    "better-dx": "^0.2.7",
+    "better-dx": "^0.2.15",
     "bumpp": "^10.0.3",
     "changelogen": "^0.5.7",
     "vite": "^6.1.0",
